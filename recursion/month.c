@@ -1,57 +1,60 @@
 #include <stdio.h>
+#include <assert.h>
+#include <string.h>
 
-void month_name(int month_num); 
+char *month_name(int month_num); 
 
 int main (void)
 {
   int month = 0; 
   printf("Please enter the month number you would like to see: "); 
   scanf(" %d", &month); 
-  month_name(month); 
+  char *month_n = month_name(month); 
+  printf("%s\n", month_n); 
+  ///////////////////////////////////////Testing///////////////////////////////////////////////////////////////////
+  assert(strcmp(month_name(1), "Jan") == 0); 
+  assert(strcmp(month_name(2), "Feb") == 0);
+  assert(strcmp(month_name(3), "Mar") == 0);
+  assert(strcmp(month_name(4), "April") == 0);
+  assert(strcmp(month_name(5), "May") == 0);
+  assert(strcmp(month_name(6), "Jun") == 0);
+  assert(strcmp(month_name(7), "Jul") == 0);
+  assert(strcmp(month_name(8), "Aug") == 0);
+  assert(strcmp(month_name(9), "Sep") == 0);
+  assert(strcmp(month_name(10), "Oct") == 0);
+  assert(strcmp(month_name(11), "Nov") == 0);
+  assert(strcmp(month_name(12), "Dec") == 0);
   return 0; 
 }
 
-void month_name(int month_num)
+char *month_name(int month_num)
 {
   switch(month_num)
   {
     case 1: 
-      printf("Jan\n"); 
-      break; 
+      return "Jan";   
     case 2:
-      printf("Feb\n"); 
-      break; 
+      return "Feb";   
     case 3:
-      printf("March\n"); 
-      break; 
+      return "Mar";  
     case 4:
-      printf("April\n"); 
-      break; 
+      return "April";   
     case 5:
-      printf("May\n"); 
-      break; 
+      return "May";  
     case 6:
-      printf("Jun\n");
-      break; 
+      return "Jun";  
     case 7:
-      printf("Jul\n"); 
-      break; 
+      return "Jul";  
     case 8:
-      printf("Aug\n"); 
-      break; 
+      return "Aug";  
     case 9:
-      printf("Sep\n"); 
-      break; 
+      return "Sep";  
     case 10:
-      printf("Oct\n"); 
-      break; 
+      return "Oct";  
     case 11:
-      printf("Nov\n"); 
-      break; 
+      return "Nov";  
     case 12:
-      printf("Dec\n");
-      break; 
-    default:
-      printf("Error, please enter a valid month number.\n"); 
+      return "Dec";  
   }
+  return NULL; 
 }
