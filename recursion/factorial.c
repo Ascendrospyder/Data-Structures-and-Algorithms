@@ -23,3 +23,5 @@ int factorial (int n)
     return 0; 
   }
 }
+
+// timecomplexity = O(n) and space complexity = O(n) since there are n amounts of activation records created in stack 
