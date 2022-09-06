@@ -75,6 +75,7 @@ void ShowTree(Tree t)
 void showTreeRecursive(Tree t, int depth)
 {
   // we printed out the tree based on preorder method 
+  /*
   if (t != NULL)
   {
     for (int i = 0; i < depth; i++)
@@ -84,5 +85,50 @@ void showTreeRecursive(Tree t, int depth)
     printf("%d\n", t->data); // print out the root first  
     showTreeRecursive(t->left, depth + 1); 
     showTreeRecursive(t->right, depth + 1);
+  }
+  */
+ if (t != NULL)
+  {
+    for (int i = 0; i < depth; i++)
+    {
+      printf("   "); 
+    }
+    printf("%d\n", t->data); // print out the root first  
+    showTreeRecursive(t->left, depth + 1); 
+    showTreeRecursive(t->right, depth + 1);
+  }
+}
+
+/**
+ * @brief Joins two trees together by finding the smallest element in the second tree and then making that the root and updating the second tree and then 
+ * adding that updated tree to the left of the root and adding the first tree to the right of the tree
+ * @param t - Tree 
+ * @param n - Tree 
+ * @return Tree - New tree with both joined together 
+ */
+Tree TreeJoin(Tree t, Tree n)
+{
+  if (t == NULL) 
+  {
+    return n; // if the first tree doesnt have anything then return the second tree
+  } else if (n == NULL)
+  {
+    return t; // if the second tree is empty return the first tree 
+  } else {
+    Tree current = n; // we create a current var which points to our second tree, from now we will use current to traverse the second tree 
+    Tree parent = NULL;  // this will be our parent (root node) for this new tree and we initalise it to NULL 
+
+    while (current->left != NULL) // finds the min element in t2, if the left isn't empty keep moving through the left section of t2
+    {
+      parent = current; // let the element to the left most section of our tree be the parent as we traverse the lhs and reach null which is the end 
+      current = current->left; 
+    }
+    if (parent != NULL) // moves the min element up to the root 
+    {
+      parent->left = current->right; // the root node's right will now hold the updated 
+      current->right = n; 
+    }
+    current->left = t; // build the left section of our new tree by linking tree 1 to the left of current which now holds the root 
+    return current; 
   }
 }

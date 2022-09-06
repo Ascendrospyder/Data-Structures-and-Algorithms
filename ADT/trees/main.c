@@ -12,7 +12,15 @@ int main (int argc, char *argv[])
   t = TreeInsert(t, 1);
   t = TreeInsert(t, 7);
   t = TreeInsert(t, 3);
-  ShowTree(t); 
-  
+
+  Tree n = TreeCreate(26);
+  n = TreeInsert(n, 24); 
+  n = TreeInsert(n, 27); 
+  n = TreeInsert(n, 29); 
+  n = TreeInsert(n, 22); 
+  n = TreeInsert(n, 24); 
+
+  Tree joined = TreeJoin(t, n); 
+  ShowTree(joined); 
   return 0; 
 }
