@@ -3,7 +3,7 @@
 
 #include "BSTree.h"
 
-typedef struct Node {
+struct Node {
   int data; 
   Tree left, right; 
 } Node; 
@@ -34,6 +34,13 @@ void TreeFree(Tree t)
 
 }
 
+/**
+ * @brief - This function inserts a node into a tree at a position 
+ * 
+ * @param t - tree
+ * @param it - item we want to insert into tree t 
+ * @return Tree 
+ */
 Tree TreeInsert(Tree t, Item it)
 {
   if (t == NULL) // if the tree hasn't been created go ahead and create it with "it" as the root
@@ -47,18 +54,24 @@ Tree TreeInsert(Tree t, Item it)
   return t; // this avoids duplicates 
 }
 
+/**
+ * @brief Prints the tree out based on either inorder, preorder or postorder methods 
+ * 
+ * @param t - Tree
+ * @param depth - levels 
+ */
 void showTreeRecursive(Tree t, int depth); 
 void ShowTree(Tree t)
 {
-  // if (t != NULL)
-  // {
-  //   printf("%d\n", t->data); // print out the root first 
-  //   ShowTree(t->left); 
-  //   ShowTree(t->right);
-  // } 
   showTreeRecursive(t, 0); // we need to pass in the initial depth as 0 
 }
 
+/**
+ * @brief Recursive call to print the whole tree out 
+ * 
+ * @param t - tree
+ * @param depth - level 
+ */
 void showTreeRecursive(Tree t, int depth)
 {
   // we printed out the tree based on preorder method 
