@@ -5,7 +5,7 @@
 
 int main (int argc, char *argv[])
 {
-  Tree t = TreeCreate(4);  
+  Tree t = TreeCreate(4);                             
   t = TreeInsert(t, 2);
   t = TreeInsert(t, 6);
   t = TreeInsert(t, 5);

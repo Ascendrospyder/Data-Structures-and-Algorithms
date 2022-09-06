@@ -64,13 +64,12 @@ void showTreeRecursive(Tree t, int depth)
   // we printed out the tree based on preorder method 
   if (t != NULL)
   {
-    showTreeRecursive(t->right, depth + 1);
     for (int i = 0; i < depth; i++)
     {
       printf("   "); 
     }
     printf("%d\n", t->data); // print out the root first  
-    
     showTreeRecursive(t->left, depth + 1); 
+    showTreeRecursive(t->right, depth + 1);
   }
 }
