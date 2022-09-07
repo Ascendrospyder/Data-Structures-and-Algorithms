@@ -26,5 +26,10 @@ int main (int argc, char *argv[])
   printf("\n\n\nDeleted Tree:\n"); 
   Tree new_tree = TreeDelete(joined, 4); 
   ShowTree(new_tree);
+  // FreeTree(new_tree);
+  // printf("\n\n\nFreed Tree:\n");  
+  Tree new = TreeRotateRight(t);
+  printf("\n\n\nNew rotated tree right:\n"); 
+  ShowTree(new);  
   return 0; 
 }

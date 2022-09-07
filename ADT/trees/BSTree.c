@@ -159,3 +159,54 @@ Tree TreeDelete(Tree t, Item it)
   } 
   return t;
 }
+
+/**
+ * @brief Frees a tree 
+ * 
+ * @param t - Tree
+ */
+void FreeTree(Tree t)
+{
+  if (t != NULL)
+  {
+    FreeTree(t->left); // go through the left and right sections of the tree and free it 
+    FreeTree(t->right);
+    free(t);  
+  }
+}
+/**
+ * @brief This function basically rotates the whole tree to the right 
+ * 
+ * @param t - Tree pointing to the root
+ * @return Tree - new tree which is rotated 
+ */
+Tree TreeRotateRight(Tree t)
+{
+  Tree current = t->left; // set up a new root and make it point to the left tree 
+  if (t == NULL || current == NULL) // if trees our empty return our original tree 
+  {
+    return t; 
+  } else {
+    t->left = current->right; 
+    current->right = t; 
+    return current; 
+  }
+}
+/**
+ * @brief This function will basically rotate the tree to the left 
+ * 
+ * @param t - tree 
+ * @return Tree - new tree which is rotated left 
+ */
+Tree TreeRotateLeft(Tree t)
+{
+  Tree current = t->right; 
+  if (t == NULL || current == NULL)
+  {
+    return t; 
+  } else {
+    t->right = current->left; 
+    current->left = t; 
+    return current; 
+  }
+}
