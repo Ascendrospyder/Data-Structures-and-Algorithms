@@ -74,20 +74,7 @@ void ShowTree(Tree t)
  */
 void showTreeRecursive(Tree t, int depth)
 {
-  // we printed out the tree based on preorder method 
-  /*
   if (t != NULL)
-  {
-    for (int i = 0; i < depth; i++)
-    {
-      printf("   "); 
-    }
-    printf("%d\n", t->data); // print out the root first  
-    showTreeRecursive(t->left, depth + 1); 
-    showTreeRecursive(t->right, depth + 1);
-  }
-  */
- if (t != NULL)
   {
     for (int i = 0; i < depth; i++)
     {
@@ -131,4 +118,43 @@ Tree TreeJoin(Tree t, Tree n)
     current->left = t; // build the left section of our new tree by linking tree 1 to the left of current which now holds the root 
     return current; 
   }
+}
+
+/**
+ * @brief This function takes in a tree and an item in the tree to delete
+ * 
+ * @param t - Tree
+ * @param it - Item 
+ * @return Tree t 
+ */
+Tree TreeDelete(Tree t, Item it)
+{ 
+  if (t != NULL) // if tree is not empty then go ahead with the code 
+  {
+    if (it < t->data)
+    {
+      t->left = TreeDelete(t->left, it); // if what we want to delete is in the left side of the tree 
+    } else if (it > t->data)
+    {
+      t->right = TreeDelete(t->right, it); // if what we want to delete is in the right side of the tree
+    } else 
+    {
+      Tree current; // set up a current variable which will hold the new tree 
+      if (t == NULL) // if tree is empty 
+      {
+        current = NULL; // if we want to delete a node with 0 children 
+      } else if (t->left == NULL) // if left side of the tree is empty, meaning no more children 
+      {
+        current = t->right; // if we want to delete a node with 1 child
+      } else if (t->right == NULL) // if right side of the tree is empty, meaning no more children 
+      {
+        current = t->left; // if we want to delete a node with 1 child
+      } else {
+        current = TreeJoin(t->left, t->right); // if we want to delete a child with 2 children 
+      } 
+      free(t); // finally free t 
+      t = current; // set t to current and return t at the end 
+    }
+  } 
+  return t;
 }

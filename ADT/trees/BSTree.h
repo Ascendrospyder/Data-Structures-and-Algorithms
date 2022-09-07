@@ -8,3 +8,4 @@ void TreeFree(Tree t);  // free's the tree
 Tree TreeInsert(Tree t, Item it); // inserts node inside of tree
 void ShowTree(Tree t); // prints the tree out 
 Tree TreeJoin(Tree t, Tree n); // joins two trees together 
+Tree TreeDelete(Tree t, Item it); 
