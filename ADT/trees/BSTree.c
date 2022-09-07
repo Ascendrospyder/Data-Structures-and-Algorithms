@@ -149,7 +149,8 @@ Tree TreeDelete(Tree t, Item it)
       } else if (t->right == NULL) // if right side of the tree is empty, meaning no more children 
       {
         current = t->left; // if we want to delete a node with 1 child
-      } else {
+      } else 
+      {
         current = TreeJoin(t->left, t->right); // if we want to delete a child with 2 children 
       } 
       free(t); // finally free t 
