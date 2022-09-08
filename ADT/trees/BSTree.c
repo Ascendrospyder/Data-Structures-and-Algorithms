@@ -210,3 +210,27 @@ Tree TreeRotateLeft(Tree t)
     return current; 
   }
 }
+/**
+ * @brief - function that inserts something into the leaf and performs rotations to bring it up to the root of the tree 
+ * 
+ * @param t - tree
+ * @param it - node of interest  
+ * @return Tree - new tree with the node of interest being at the root 
+ */
+Tree InsertAtRoot(Tree t, Item it)
+{
+  Tree current = t; // current now holds the value of the root of the tree 
+  if (t == NULL) // if the tree is empty then return a new created tree
+  {
+    return TreeCreate(it); 
+  } else if (it < current->data) // if the node we want to insert is less than the root then go the the next node left to the root 
+  {
+    t->left = InsertAtRoot(t->left, it); 
+    t = TreeRotateRight(t);  // these will be done at the end as the above is the recursive call and these will just perform the rotations 
+  } else if (it > current->data) // if the node we want to insert is more than the root then go the the next node right to the root 
+  {
+    t->right = InsertAtRoot(t->right, it);
+    t = TreeRotateLeft(t);   
+  }
+  return t; // return the tree at the end 
+}

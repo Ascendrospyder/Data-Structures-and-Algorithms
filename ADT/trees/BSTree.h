@@ -12,3 +12,4 @@ Tree TreeDelete(Tree t, Item it);
 void FreeTree(Tree t); 
 Tree TreeRotateRight(Tree t); 
 Tree TreeRotateLeft(Tree t); 
+Tree InsertAtRoot(Tree t, Item it); 
