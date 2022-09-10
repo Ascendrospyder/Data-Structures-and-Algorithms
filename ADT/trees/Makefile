@@ -1,5 +1,5 @@
 main : main.o BSTree.o
-	gcc -Wall -Werror -o main main.o BSTree.o
+	gcc -Wall -Werror -g -o main main.o BSTree.o
 
 main.o : main.c 
 	gcc -Wall -Werror -c main.c
