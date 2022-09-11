@@ -10,6 +10,9 @@
 
 #include "IntList.h"
 
+#define TRUE 1
+#define FALSE 0 
+
 // data structures representing IntList
 struct IntListNode {
 	int data;
@@ -108,25 +111,46 @@ static struct IntListNode *newIntListNode(int v) {
  */
 void IntListInsertInOrder(IntList l, int v) {
 	// TODO: Task 1 - Implement this function
-	/*if (l == NULL) {
-		fprintf(stderr, "The list is empty!\n");
-		exit(EXIT_FAILURE);  
-	}*/ 
-	// for (int i = 0; i < l->size; i++)
-	// {
-	// 	if (l->)
-	// }
-	struct IntListNode *current; 
-	for (current = l->first; current != NULL; current = current->next)
+	assert(l != NULL); // checking if list is not empty
+
+	struct IntListNode *current = l->first; // this node will be pointing to the first element of the LL 
+	struct IntListNode *previous = NULL; // previous is still NULL 
+	struct IntListNode *n = malloc(sizeof(struct IntListNode)); // make a new node 
+
+	n->data = v; // this new node made will now point to each element of the list
+	n->next = NULL; // the data added is the tail
+
+	l->size++; // as we add elements we want to increase the size by 1 
+
+	if (l->first == NULL) // if list is empty 
 	{
-		if (current->data == v) 
+		l->first = n; // assign the first and last node as the new node we made
+		l->last = n; 
+	} else 
+	{
+		while (current != NULL && current->data <= v) // loop through the whole list 
 		{
-			return; 
-		} 
+			previous = current; 
+			current = current->next; 
+		}
+
+		// this will place v in its right order 
+		if (previous == NULL) // if we are at the start of the list 
+		{
+			n->next = l->first; 
+			l->first = n; 
+		} else {
+			previous->next = n; 
+			n->next = current; 
+		}
+
+		if (current == NULL) {
+			l->last = n; 
+		}
 	}
-	current->data = v; 
-	l->size++; 	
+	return; 
 }
+
 
 /**
  * Returns the number of elements in an IntList.
