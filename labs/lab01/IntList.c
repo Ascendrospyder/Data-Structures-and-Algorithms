@@ -126,8 +126,7 @@ void IntListInsertInOrder(IntList l, int v) {
 	{
 		l->first = n; // assign the first and last node as the new node we made
 		l->last = n; 
-	} else 
-	{
+	} else {
 		while (current != NULL && current->data <= v) // loop through the whole list 
 		{
 			previous = current; // assign previous with the value of current as we traverse the list 
@@ -177,9 +176,23 @@ IntList IntListCopy(IntList l) {
 IntList IntListSortedCopy(IntList l) {
 	// TODO: Task 2 - Implement this function
 	// Note: You *must* use IntListInsertInOrder
+	assert(l != NULL); 
+	if (l == NULL) 
+	{
+		fprintf(stderr, "Error, the list is empty"); 
+	}
 
+	// create a new list 
+	struct IntListRep *new_list = IntListNew(); 
+	struct IntListNode *current = l->first; // create a temp variable which points to the head
+
+	while (current != NULL) // traverse the list 
+	{
+		IntListInsertInOrder(new_list, current->data); // as you traverse, insert the data into the new_list based on the correct order
+		current = current->next;  
+	}
 	// TODO: Replace this with your return value
-	return IntListNew();
+	return new_list;
 }
 
 /**
