@@ -115,10 +115,9 @@ void IntListInsertInOrder(IntList l, int v) {
 
 	struct IntListNode *current = l->first; // this node will be pointing to the first element of the LL 
 	struct IntListNode *previous = NULL; // previous is still NULL 
-	struct IntListNode *n = malloc(sizeof(struct IntListNode)); // make a new node 
-
-	n->data = v; // this new node made will now point to each element of the list
-	n->next = NULL; // the data added is the tail
+	
+	static struct IntListNode *n; 
+	n = newIntListNode(v); // utilising the newListNode function to create a new node to help in the coding this out 
 
 	l->size++; // as we add elements we want to increase the size by 1 
 
