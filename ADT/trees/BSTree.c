@@ -234,3 +234,8 @@ Tree InsertAtRoot(Tree t, Item it)
   }
   return t; // return the tree at the end 
 }
+
+Tree Partition(Tree t, int index)
+{
+  
+}

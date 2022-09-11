@@ -1,4 +1,4 @@
-
+ 
 typedef struct Node *Tree; // we create our data structure using a typedef 
 
 typedef int Item; 
