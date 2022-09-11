@@ -121,6 +121,7 @@ void IntListInsertInOrder(IntList l, int v) {
 
 	l->size++; // as we add elements we want to increase the size by 1 
 
+	// code adapted from IntListAppend
 	if (l->first == NULL) // if list is empty 
 	{
 		l->first = n; // assign the first and last node as the new node we made
@@ -129,7 +130,7 @@ void IntListInsertInOrder(IntList l, int v) {
 	{
 		while (current != NULL && current->data <= v) // loop through the whole list 
 		{
-			previous = current; 
+			previous = current; // assign previous with the value of current as we traverse the list 
 			current = current->next; 
 		}
 
@@ -143,12 +144,12 @@ void IntListInsertInOrder(IntList l, int v) {
 			n->next = current; 
 		}
 
-		if (current == NULL) {
+		if (current == NULL) { // if the first node is empty then go ahead and add the new node into the tail 
 			l->last = n; 
 		}
 	}
 	return; 
-}
+} // all tested and works  
 
 
 /**
