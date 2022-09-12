@@ -13,3 +13,4 @@ void FreeTree(Tree t);
 Tree TreeRotateRight(Tree t); 
 Tree TreeRotateLeft(Tree t); 
 Tree InsertAtRoot(Tree t, Item it); 
+Tree insertAVL(Tree t, Item it); 

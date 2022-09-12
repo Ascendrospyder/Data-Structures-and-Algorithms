@@ -235,7 +235,68 @@ Tree InsertAtRoot(Tree t, Item it)
   return t; // return the tree at the end 
 }
 
-Tree Partition(Tree t, int index)
-{
+// Tree Partition(Tree t, int index)
+// {
   
+// }
+/**
+ * @brief Calculates the height of a tree
+ * 
+ * @param t - tree
+ * @return int 
+ */
+int TreeHeight(Tree t) 
+{
+   if (t == NULL) {
+      return 0;
+   } else {
+      int lheight = 1 + TreeHeight(t->left);
+      int rheight = 1 + TreeHeight(t->right);
+      if (lheight > rheight)
+	 return lheight;
+      else
+	 return rheight;
+   }
+}
+
+Tree insertAVL(Tree t, Item it)
+{
+  if (t == NULL) // if the tree is empty then go ahead and create a node with the item 
+  {
+    return TreeCreate(it);
+  } else if (it == t->data) // if the item we want to insert is the same as a node return the normal tree 
+  {
+    return t; 
+  }
+
+
+  // the following code will insert it into its correct position
+  if (it < t->data) // if item is less than the node, then go ahead and put it on its left 
+  {
+    t->left = insertAVL(t->left, it); // this will make a recursive call and the left node will be NULL, therefore it will go ahead and create a node there 
+  } else if (it > t->data) // if item is greater than the node, then go ahead and put it on its right 
+  {
+    t->right = insertAVL(t->right, it); 
+  }
+
+  // the following code will unwind the tree and make sure its balanced 
+  int height_left = TreeHeight(t->left); // declare two variables, height left and right 
+  int height_right = TreeHeight(t->right); 
+
+  if ((height_left - height_right) > 1) // if the balance factor is unbalanced then proceed below 
+  {
+    if (it > t->left->data) // this means the item will be positioned to the right of the t->left section, to balance this we need to rotate it to the left 
+    {
+      t->left = TreeRotateLeft(t->left); 
+    }
+    t = TreeRotateRight(t); // after rotating to the left we need to rotate it to the right to ensure balance 
+  } else if ((height_right - height_left) > 1)
+  {
+    if (it < t->right->data) // this is a RL imbalance, therfore we need to first rotate to the right and then left 
+    {
+      t->right = TreeRotateRight(t->right); 
+    }
+    t = TreeRotateLeft(t); 
+  }
+  return t; 
 }
