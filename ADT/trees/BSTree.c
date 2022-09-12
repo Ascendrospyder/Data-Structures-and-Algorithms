@@ -259,6 +259,13 @@ int TreeHeight(Tree t)
    }
 }
 
+/**
+ * @brief - This function will automatically balance trees at the time of insertion, however this will be height balanced and not always weight balanced 
+ * 
+ * @param t - Tree to insert in
+ * @param it - item to insert
+ * @return Tree - new tree with inserted item 
+ */
 Tree insertAVL(Tree t, Item it)
 {
   if (t == NULL) // if the tree is empty then go ahead and create a node with the item 
