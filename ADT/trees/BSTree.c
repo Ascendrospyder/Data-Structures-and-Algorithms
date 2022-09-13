@@ -299,11 +299,30 @@ Tree insertAVL(Tree t, Item it)
     t = TreeRotateRight(t); // after rotating to the left we need to rotate it to the right to ensure balance 
   } else if ((height_right - height_left) > 1)
   {
-    if (it < t->right->data) // this is a RL imbalance, therfore we need to first rotate to the right and then left 
+    if (it < t->right->data) // this  is a RL imbalance, therfore we need to first rotate to the right and then left 
     {
       t->right = TreeRotateRight(t->right); 
     }
     t = TreeRotateLeft(t); 
   }
   return t; 
+}
+
+Tree search234Tree(Tree t, Item it)
+{
+  if (t == NULL)
+  {
+    return NULL; 
+  } else {
+    for (int i = 0; i < tree.data[i] && i > tree.data[i - 1]; i++)
+    {
+      if (item == tree.data[i])
+      {
+        return tree.data[i]; 
+      } else 
+      {
+        return search234Tree(tree.); 
+      }
+    }
+  }
 }
