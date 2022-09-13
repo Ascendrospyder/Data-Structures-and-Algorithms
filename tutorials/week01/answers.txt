@@ -1,0 +1,107 @@
+Q1 
+  for (int i = 10; i >= 0; i--)
+  {
+    printf("%d\n", i); 
+  }
+
+Q2
+  int ch; 
+  while ((ch = getchar()) != EOF)
+  {
+    putchar(ch); 
+    ch = getchar(); 
+  }
+
+Q3
+  // Input:
+// - a is a valid pointer to the start of an array of ints
+// - n is a positive int indicating how many elements in a[]
+// Output:
+// - returns true if a[i] <= a[i + 1] for all i in [0..n - 2]
+bool isSorted(int *a, int n) {
+  for (int i = 0; i < n - 1; i++)
+  {
+    if (a[i] <= a[i + 1])
+    {
+      return true; 
+    } 
+  }
+  return false; 
+}
+
+Q4
+  (a) u = you , o = ohh , e = eee 
+  (b) u = you , o = ohh you , e = eee eye ohh you 
+
+Q5
+  char *numToDay(int n) {
+	assert(0 <= n && n <= 6);
+	char *day;
+  switch (n)
+  {
+    case 0: assert(day = "Sun"); break; 
+    case 1: assert(day = "Mon"); break; 
+    case 3: assert(day = "Tue"); break; 
+    case 4: assert(day = "Wed"); break; 
+    case 5: assert(day = "Thu"); break; 
+    case 6: assert(day = "Fri"); break; 
+  }
+  return day; 
+
+  if the assert was removed then it would have been treated as a normal case, since 
+  it wouldn't match any case it would directly just return day which is uninitialised 
+
+Q6
+  assert(islower(ch));
+  switch (ch) {
+  	case 'a':
+  	case 'e':
+  	case 'i':
+  	case 'o':
+  	case 'u':
+  		printf("vowel"); break;
+  	default:
+  		printf("consonant"); break;
+  }
+
+  if equivalent: 
+  assert(islower(ch)); 
+  if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch  == 'u')
+  {
+    printf("vowel"); 
+    break; 
+  } else {
+    printf("consonant"); 
+    break; 
+  }
+
+Q7
+  printf("'%c' is a %s\n", ch, type);
+
+  int ch = getchar(); 
+  char *type; 
+  switch(isdigit(ch))
+  {
+    case 0: type = "digit"; break; 
+    default: type = "non-digit"; break; 
+  }
+
+Q8 
+  typedef int Integer; This line is basically saying we will from now on call an int type as Integer 
+
+  struct point {
+      int x;
+      int y;
+  };
+  typedef struct point Point; from now on we will refer to struct point as Point for simplicity 
+
+  struct node {
+      int value;
+      struct node *next; 
+  };
+  typedef struct node *Node; from now on we fill refer to struct node * as Node 
+
+LL revision 
+Q1 
+  
+
