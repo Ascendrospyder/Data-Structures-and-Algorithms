@@ -10,8 +10,8 @@
 
 #include "IntList.h"
 
-#define TRUE 1
-#define FALSE 0 
+#define TRUE  1
+#define FALSE 0
 
 // data structures representing IntList
 struct IntListNode {
@@ -20,9 +20,9 @@ struct IntListNode {
 };
 
 struct IntListRep {
-	int size;                  // number of elements in the list
-	struct IntListNode *first; // pointer to node containing first value
-	struct IntListNode *last;  // pointer to node containing last value
+	int size;                   // number of elements in the list
+	struct IntListNode *first;  // pointer to node containing first value
+	struct IntListNode *last;   // pointer to node containing last value
 };
 
 static struct IntListNode *newIntListNode(int v);
@@ -111,45 +111,52 @@ static struct IntListNode *newIntListNode(int v) {
  */
 void IntListInsertInOrder(IntList l, int v) {
 	// TODO: Task 1 - Implement this function
-	assert(l != NULL); // checking if list is not empty
+	assert(l != NULL);  // checking if list is not empty
 
-	struct IntListNode *current = l->first; // this node will be pointing to the first element of the LL 
-	struct IntListNode *previous = NULL; // previous is still NULL 
-	
-	static struct IntListNode *n; 
-	n = newIntListNode(v); // utilising the newListNode function to create a new node to help in the coding this out 
+	struct IntListNode *current =
+	    l->first;  // this node will be pointing to the first element of the LL
+	struct IntListNode *previous = NULL;  // previous is still NULL
 
-	l->size++; // as we add elements we want to increase the size by 1 
+	static struct IntListNode *n;
+	n = newIntListNode(
+	    v);  // utilising the newListNode function to create a new
+	         // node to help in the coding this out
+
+	l->size++;  // as we add elements we want to increase the size by 1
 
 	// code adapted from IntListAppend
-	if (l->first == NULL) // if list is empty 
+	if (l->first == NULL)  // if list is empty
 	{
-		l->first = n; // assign the first and last node as the new node we made
-		l->last = n; 
+		l->first = n;  // assign the first and last node as the new node we made
+		l->last = n;
 	} else {
-		while (current != NULL && current->data <= v) // loop through the whole list 
+		while (current != NULL &&
+		       current->data <= v)  // loop through the whole list
 		{
-			previous = current; // assign previous with the value of current as we traverse the list 
-			current = current->next; 
+			previous =
+			    current;  // assign previous with the value of current as we
+			              // traverse the list
+			current = current->next;
 		}
 
-		// this will place v in its right order 
-		if (previous == NULL) // if we are at the start of the list 
+		// this will place v in its right order
+		if (previous == NULL)  // if we are at the start of the list
 		{
-			n->next = l->first; 
-			l->first = n; 
+			n->next = l->first;
+			l->first = n;
 		} else {
-			previous->next = n; 
-			n->next = current; 
+			previous->next = n;
+			n->next = current;
 		}
 
-		if (current == NULL) { // if the first node is empty then go ahead and add the new node into the tail 
-			l->last = n; 
+		if (current ==
+		    NULL) {  // if the first node is empty then go ahead and add
+			         // the new node into the tail
+			l->last = n;
 		}
 	}
-	return; 
-} // all tested and works  
-
+	return;
+}  // all tested and works
 
 /**
  * Returns the number of elements in an IntList.
@@ -163,8 +170,7 @@ int IntListLength(IntList l) {
  */
 IntList IntListCopy(IntList l) {
 	IntList copy = IntListNew();
-	for (struct IntListNode *curr = l->first;
-			curr != NULL; curr = curr->next) {
+	for (struct IntListNode *curr = l->first; curr != NULL; curr = curr->next) {
 		IntListAppend(copy, curr->data);
 	}
 	return copy;
@@ -176,20 +182,23 @@ IntList IntListCopy(IntList l) {
 IntList IntListSortedCopy(IntList l) {
 	// TODO: Task 2 - Implement this function
 	// Note: You *must* use IntListInsertInOrder
-	assert(l != NULL); 
-	if (l == NULL) 
-	{
-		fprintf(stderr, "Error, the list is empty"); 
+	assert(l != NULL);
+	if (l == NULL) {
+		fprintf(stderr, "Error, the list is empty");
 	}
 
-	// create a new list 
-	struct IntListRep *new_list = IntListNew(); 
-	struct IntListNode *current = l->first; // create a temp variable which points to the head
+	// create a new list
+	struct IntListRep *new_list = IntListNew();
+	struct IntListNode *current =
+	    l->first;  // create a temp variable which points to the head
 
-	while (current != NULL) // traverse the list 
+	while (current != NULL)  // traverse the list
 	{
-		IntListInsertInOrder(new_list, current->data); // as you traverse, insert the data into the new_list based on the correct order
-		current = current->next;  
+		IntListInsertInOrder(
+		    new_list,
+		    current->data);  // as you traverse, insert the data into the
+		                     // new_list based on the correct order
+		current = current->next;
 	}
 	// TODO: Replace this with your return value
 	return new_list;
@@ -205,8 +214,8 @@ bool IntListIsSorted(IntList l) {
 	}
 
 	// scan the list, looking for an out-of-order pair
-	for (struct IntListNode *curr = l->first;
-			curr->next != NULL; curr = curr->next) {
+	for (struct IntListNode *curr = l->first; curr->next != NULL;
+	     curr = curr->next) {
 		if (curr->data > curr->next->data) {
 			return false;
 		}
@@ -239,7 +248,7 @@ bool IntListOK(IntList l) {
 	struct IntListNode *curr = l->first;
 	struct IntListNode *prev = NULL;
 	int numNodes = 0;
-	
+
 	while (curr != NULL) {
 		numNodes++;
 		prev = curr;
@@ -254,9 +263,7 @@ bool IntListOK(IntList l) {
  * Assumes that the file is open for writing.
  */
 void IntListPrint(IntList l, FILE *out) {
-	for (struct IntListNode *curr = l->first;
-			curr != NULL; curr = curr->next) {
+	for (struct IntListNode *curr = l->first; curr != NULL; curr = curr->next) {
 		fprintf(out, "%d\n", curr->data);
 	}
 }
-
