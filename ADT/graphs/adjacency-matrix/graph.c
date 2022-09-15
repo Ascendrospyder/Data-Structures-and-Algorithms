@@ -25,6 +25,8 @@ Graph GraphNew(Vertex V)
   g->nV = V; 
   g->nE = 0; // since its a new graph it has no edges 
   // allocate memory for each row 
+  // the reason we don't malloc with two loops is because the malloc following this line 
+  // will go ahead and allocate memory to each row an the next loop will go through the cols
   g->edges = malloc(V * sizeof(int *)); 
   // allocate memory for each col and initialise with 0 
   for (int i = 0; i < V; i++)
@@ -44,8 +46,8 @@ void GraphEdgeInsert(Graph g, Edge e)
 {
   if (!g->edges[e->v][e->w]) // if (g->edges[e->v][e->w] != 0) which means if edge e isn't in graph 
   {
-    g->edges[e->v][e->w] = 1; 
-    g->edges[e->w][e->v] = 1;
+    g->edges[e->v][e->w] = 1; // a slot adj[i][j] = 1 indicates that there is an edge from vertex i to vertex j.
+    g->edges[e->w][e->v] = 1; // the reason why we do this twice is because there is an edge from v - w and w - v so we set it as 1 twice 
     g->nE++; // increase the number of edges by 1  
   }
 }
@@ -60,8 +62,8 @@ void GraphEdgeRemove(Graph g, Edge e)
 {
   if (g->edges[e->v][e->w]) // if g->edges[e->v][e->w] == 0) which means if the edge is found 
   {
-    g->edges[e->v][e->w] = 0;
-    g->edges[e->w][e->v] = 0;
+    g->edges[e->v][e->w] = 0; // a slot adj[i][j] = 0 indicates that there is an edge from vertex i to vertex j and we want to remove it.
+    g->edges[e->w][e->v] = 0; // the reason why we do this twice is because there is an edge from v - w and w - v so we set it as 0 twice 
     g->nE--; // decrement the number of edges by 1 
   }
 }
@@ -93,11 +95,14 @@ void GraphShow(Graph g)
 void GraphDestroy(Graph g)
 {
   assert(g != NULL); 
-  // loop through the edges array of a graph and destroy each element just like that
+  // loop through the edges array of a graph and destroy each element in the row just like that
+  // the reason we don't free with two loops is because the free following this line 
+  // will go ahead and free memory for each row and the next loop will go through the cols and free
   for (int i = 0; i < g->nV; i++)
   {
     free(g->edges[i]); 
   }
+  // this will free everything in the col 
   free(g->edges); // free the edges array 
   free(g); // free the graph 
 }
