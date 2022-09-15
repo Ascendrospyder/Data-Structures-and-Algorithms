@@ -12,7 +12,7 @@ typedef struct GraphRep {
 } GraphRep;  
 
 /**
- * @brief - creates a new graph 
+ * @brief - creates a new graph
  * 
  * @param V - takes in a vertex v 
  * @return Graph 
@@ -22,6 +22,7 @@ Graph GraphNew(Vertex V)
   assert(V >= 0); // return an error if the Vertex isnt greater than or equal to 0  
   Graph g = malloc(sizeof(GraphRep)); // allocate some memory for the graph
 
+  g->n = (V*(V - 1)) / 2; // set the size of the array as this 
   g->nV = V; // fill in the values for the graph 
   g->nE = 0;             
   g->edges = malloc(g->n * sizeof(Edge)); // allocate (size of edge array) * sizeof(Edge struct); 
@@ -42,7 +43,7 @@ bool checkEqual(Edge e1, Edge e2)
 }
 
 /**
- * @brief - This function inserts an edge into a graph 
+ * @brief - This function loops to the end of the edge array and inserts an edge at the end 
  * 
  * @param g - takes in a graph 
  * @param e - takes in an edge 
@@ -57,7 +58,7 @@ void GraphEdgeInsert(Graph g, Edge e) // Edge e = (v, w);
     i++; // amount of elements 
   }
 
-  if (i == g->nE) // if the index value is the same as the number of edges then go ahead and insert the edge into the array 
+  if (i == g->nE) // if the edge has not been found then go ahead and insert the edge into the array 
   {
     g->edges[g->nE++] = e; // insert edge e into the edges array of graph g
   } 
@@ -75,6 +76,11 @@ void GraphEdgeRemove(Graph g, Edge e)
 
   int i = 0; 
   while (i < g->nE && !checkEqual(e, g->edges[i])) // loop as long as we reach the g->ne amount of elements provided they are not equal
+  {
+    i++; 
+  }
+
+  if (i < g->nE) // if edge found then go ahead and remove 
   {
     g->edges[i] = g->edges[--g->nE]; // at the point of index go ahead and remove 
   }
