@@ -1,13 +1,23 @@
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-typedef struct GraphRep *Graph // we are typedefing the struct similar to BST one
+#include "list.h"
+
+typedef struct GraphRep *Graph; // we are typedefing the struct similar to BST one
 
 typedef int Vertex; 
 
 typedef struct Node {
   Vertex v; 
-  Node *next;
+  struct Node *next; 
 } Node; 
+
+typedef struct Edge {
+  Vertex v; 
+  Vertex w; 
+} Edge; 
+
 
 Graph GraphNew(int); 
 void GraphEdgeInsert(Graph, Edge); 

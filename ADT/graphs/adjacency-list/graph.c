@@ -14,10 +14,10 @@ typedef struct GraphRep {
 /**
  * @brief - the following function will create a new graph 
  * 
- * @param v - Vertex v 
+ * @param v - num of vertices 
  * @return Graph 
  */
-Graph GraphNew(Vertex v)
+Graph GraphNew(Vertex V)
 {
   assert(V >= 0); 
 
@@ -58,12 +58,12 @@ bool validV(Graph g, Vertex v)
  */
 void GraphEdgeInsert(Graph g , Edge e) 
 {
-  assert(g != NULL && validV(g, e->v) && validV(g, e->w)); // if the following conditions are false then print an error in terminal
+  assert(g != NULL && validV(g, e.v) && validV(g, e.w)); // if the following conditions are false then print an error in terminal
 
-  if(!inLL(g->edges[e->v], e->w)) // if the edge is not already in the graph then go ahead and create it 
+  if(!inLL(g->edges[e.v], e.w)) // if the edge is not already in the graph then go ahead and create it 
   {
-    g->edges[e->v] = insertLL(g->edges[e->v], e->w); // inserts e->w in the head of the LL 
-    g->edges[e->w] = insertLL(g->edges[e->w], e->v); // inserts e->v in the head of the LL
+    g->edges[e.v] = insertLL(g->edges[e.v], e.w); // inserts e->w in the head of the LL 
+    g->edges[e.w] = insertLL(g->edges[e.w], e.v); // inserts e->v in the head of the LL
     g->nE++; // increment the num edges by 1 
   }
 }
@@ -76,12 +76,12 @@ void GraphEdgeInsert(Graph g , Edge e)
  */
 void GraphEdgeRemove(Graph g, Edge e)
 {
-  assert(g != NULL && validV(g, e->v) && validV(g, e->w)); // if the following conditions are false then print an error in terminal
+  assert(g != NULL && validV(g, e.v) && validV(g, e.w)); // if the following conditions are false then print an error in terminal
 
-  if (inLL(g->edges[e->v], e->w)) // if the edge is already in the graph 
+  if (inLL(g->edges[e.v], e.w)) // if the edge is already in the graph 
   {
-    g->edges[e->v] = deleteLL(g->edges[e->v], e->w); // deletes the node e->w in LL 
-    g->edges[e->w] = deleteLL(g->edges[e->w], e->v); // deletes the node e->v in LL 
+    g->edges[e.v] = deleteLL(g->edges[e.v], e.w); // deletes the node e->w in LL 
+    g->edges[e.w] = deleteLL(g->edges[e.w], e.v); // deletes the node e->v in LL 
     g->nE--; // decrement the number of edges by 1 
   }
 }
@@ -97,7 +97,7 @@ void GraphEdgeRemove(Graph g, Edge e)
  */
 bool GraphAdjacent(Graph g, Vertex v, Vertex w)
 {
-  assert(g != NULL && validV(g->v, v));
+  assert(g != NULL && validV(g, v));
 
   return inLL(g->edges[v], w);  
 } 
