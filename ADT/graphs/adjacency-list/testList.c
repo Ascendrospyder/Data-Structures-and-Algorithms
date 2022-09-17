@@ -10,6 +10,7 @@ int main (int argc, char **argv) {
     a = insertLL(a, 2);
     a = insertLL(a, 100);
     a = insertLL(a, 4);
+    a = insertLL(a, 4);
     printf("Adding elements into LL:\n"); 
     showLL(a); 
     List b = deleteLL(a, 2);
