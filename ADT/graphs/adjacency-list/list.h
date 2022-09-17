@@ -1,8 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 
 typedef struct Node *List;
 
-Node *makeNode (int); 
+struct Node *makeNode (int); 
 List insertLL (List, int); 
 List deleteLL(List, int); 
 bool inLL (List, int);

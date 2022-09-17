@@ -1,13 +1,14 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "list.h"
 
 typedef struct Node {
     int data; 
     struct Node *next; 
-} 
+}Node;
 /**
  * @brief - this creates a node 
  * 
