@@ -72,14 +72,14 @@ void QueueEnqueue(Queue q, Item it) {
 
 	// if the queues size is 0 then the head should point to the new node
 	if (q->size == 0)
-	{
+	{ 
 		q->head = new; 
 	} else 
 	{
 		q->tail->next = new; // assign new node to the end of the queue
 	}
 	// let q's tail now point to our new node
-	q->tail = new; 
+	q->tail = new;             
 	q->size++; // increment the size of the queue by one as we added an element 
 }
 

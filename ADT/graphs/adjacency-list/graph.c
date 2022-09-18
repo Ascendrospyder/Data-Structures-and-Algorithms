@@ -17,19 +17,20 @@ typedef struct GraphRep {
  * @param v - num of vertices 
  * @return Graph 
  */
-Graph GraphNew(Vertex V)
+Graph GraphNew(Vertex numV)
 {
-  assert(V >= 0); 
+  assert(numV >= 0); 
 
   Graph g = malloc(sizeof(GraphRep)); // allocate some memory for the graph
 
   // populate the struct with the values 
-  g->nV = V; 
+  g->nV = numV; 
   g->nE = 0; 
 
   // allocate memory for the array of list 
-  g->edges = malloc(V * sizeof(Node)); 
+  g->edges = malloc(numV * sizeof(Node)); 
 
+  // loops through all edges and sets everything to NULL
   for (int i = 0; i < g->nV; i++)
   {
     g->edges[i] = NULL; // setting everything to NULL 
@@ -135,4 +136,17 @@ void GraphDestroy(Graph g)
     freeLL(g->edges[i]); // loop through edges and free the rows 
   }
   free(g); // free the cols 
+}
+
+void findPathBFS(Graph g, Vertex src, Vertex dest)
+{
+  Vertex *visited = malloc(sizeof(Vertex*)); 
+  for (int i = 0; i < g->nV; i++)
+  {
+    visited[i] = -1; 
+  }
+  int found = false; 
+  visited[src] = src; 
+  Queue q = 
+
 }
