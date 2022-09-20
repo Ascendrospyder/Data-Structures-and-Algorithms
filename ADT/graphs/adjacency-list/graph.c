@@ -4,6 +4,10 @@
 
 #include "graph.h" 
 #include "list.h"
+#include "queue.h"
+
+#define FALSE 0 
+#define TRUE 1 
 
 typedef struct GraphRep {
   Node **edges; // 2d array of edges 
@@ -138,15 +142,80 @@ void GraphDestroy(Graph g)
   free(g); // free the cols 
 }
 
+bool dfsCycleCheck(Graph g, Vertex v, Vertex u); 
+
 void findPathBFS(Graph g, Vertex src, Vertex dest)
 {
-  Vertex *visited = malloc(sizeof(Vertex*)); 
+  Vertex *visited = malloc(sizeof(Vertex*)); // create a visited array 
   for (int i = 0; i < g->nV; i++)
   {
-    visited[i] = -1; 
+    visited[i] = -1; // initialise everything to -1 
   }
-  int found = false; 
-  visited[src] = src; 
-  Queue q = 
+  int found = FALSE; // make a flag variable and assign it as false 
+  visited[src] = src; // fill the starting nodes value with itself 
+  
+  Queue q = QueueNew(); // create a new queue 
+  QueueEnqueue(q, src);  // add src (root node) to the queue 
+  while (!QueueIsEmpty(q) && found == FALSE) // as we go through the queue, make sure its not empty found != 0 
+  { 
+    Vertex v = QueueDequeue(q); // take something of the queue 
+    Vertex w; 
+    for (w = 0; w < g->nV; w++) // loop through all the neighbours  of the graph 
+    {
+      if (GraphAdjacent(g, v, w) && visited[w] == -1) // check if nodes are adjacent and havent been visited yet
+      {
+        visited[w] = v; 
+        if (w == dest) // if w is what we are looking for mark it as found 
+        {
+          found = TRUE;
+        } else {
+          QueueEnqueue(q, w); // if not found add w to the queue
+        }
+    }  
+  }
+}
 
+bool dfsCycleCheck(Graph g, Vertex v, Vertex u)
+{
+  Vertex *visited; 
+  visited[v] = true; 
+  for (Vertex w = 0; w < g->nV; w++)
+  {
+    if (GraphAdjacent(g, v, w))
+    {
+      if (!visited[w])
+      {
+        if (dfsCycleCheck(g, w, v))
+        {
+          return true; 
+        } else if (w != u)
+        {
+          return true; 
+        }
+      }
+    }
+  }
+  return false; 
+}
+
+bool hasCycle(Graph g, Vertex s)
+{
+  Vertex *visited; 
+  bool result = false; 
+  visited = calloc(g->nV, sizeof(int)); // this will manually allocate memory and set everything to 0
+
+  for (int v = 0; v < g->nV; v++)
+  {
+    for (int i = 0; i < g->nV; i++)
+    {
+      visited[i] = -1; 
+    } 
+    if (dfsCycleCheck(g, v, v))
+    {
+      result = true; 
+      break; 
+    }
+  }
+  free(visited); 
+  return result; 
 }
