@@ -8,12 +8,9 @@
 
 #define FALSE 0 
 #define TRUE 1 
+#define MAX_NODES 1000
 
-typedef struct GraphRep {
-  Node **edges; // 2d array of edges 
-  int nV; // number of vertices 
-  int nE; // number of edges 
-} GraphRep;  
+
 
 /**
  * @brief - the following function will create a new graph 
@@ -142,17 +139,19 @@ void GraphDestroy(Graph g)
   free(g); // free the cols 
 }
 
+/*
+
 bool dfsCycleCheck(Graph g, Vertex v, Vertex u); 
 
 void findPathBFS(Graph g, Vertex src, Vertex dest)
 {
-  Vertex *visited = malloc(sizeof(Vertex*)); // create a visited array 
+  Vertex *visited_array = malloc(sizeof(Vertex *)); // create a visited_array array 
   for (int i = 0; i < g->nV; i++)
   {
-    visited[i] = -1; // initialise everything to -1 
+    visited_array[i] = -1; // initialise everything to -1 
   }
   int found = FALSE; // make a flag variable and assign it as false 
-  visited[src] = src; // fill the starting nodes value with itself 
+  visited_array[src] = src; // fill the starting nodes value with itself 
   
   Queue q = QueueNew(); // create a new queue 
   QueueEnqueue(q, src);  // add src (root node) to the queue 
@@ -162,22 +161,23 @@ void findPathBFS(Graph g, Vertex src, Vertex dest)
     Vertex w; 
     for (w = 0; w < g->nV; w++) // loop through all the neighbours  of the graph 
     {
-      if (GraphAdjacent(g, v, w) && visited[w] == -1) // check if nodes are adjacent and havent been visited yet
+      if (GraphAdjacent(g, v, w) && visited_array[w] == -1) // check if nodes are adjacent and havent been visited_array yet
       {
-        visited[w] = v; 
+        visited_array[w] = v; 
         if (w == dest) // if w is what we are looking for mark it as found 
         {
           found = TRUE;
         } else {
           QueueEnqueue(q, w); // if not found add w to the queue
         }
-    }  
-  }
+      }  
+    }
+  } 
 }
 
 bool dfsCycleCheck(Graph g, Vertex v, Vertex u)
 {
-  Vertex *visited; 
+  Vertex *visited = malloc(sizeof(Vertex *)); 
   visited[v] = true; 
   for (Vertex w = 0; w < g->nV; w++)
   {
@@ -219,3 +219,47 @@ bool hasCycle(Graph g, Vertex s)
   free(visited); 
   return result; 
 }
+*/ 
+/*
+bool visited[MAX_NODES];
+
+
+bool hamiltonR(Graph g, int nV, Vertex v, Vertex dest, int d) 
+{
+// v = current vertex considered
+// dest = destination vertex
+// d = distance "remaining" until path found
+
+   Vertex w;
+   if (v == dest) 
+   {
+      return (d == 0);
+   } else 
+   {
+      visited[v] = true;
+      for (w = 0; w < nV; w++) 
+      {
+	      if (GraphAdjacent(g, v, w) && !visited[w]) 
+        {
+	          if (hamiltonR(g, nV, w, dest, d-1)) 
+            {
+	            return true;
+	          }
+	      }
+      }
+   }
+   visited[v] = false;
+   return false;
+}
+
+bool hasHamiltonianPath(Graph g, int nV, Vertex src, Vertex dest) 
+{
+  Vertex v;
+  for (v = 0; v < nV; v++)
+  {
+    visited[v] = false;
+  }
+
+  return hamiltonR(g, nV, src, dest, nV-1);
+}
+*/ 

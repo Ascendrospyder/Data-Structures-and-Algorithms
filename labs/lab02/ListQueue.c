@@ -46,6 +46,7 @@ void QueueFree(Queue q) {
 	}
 	free(q);
 }
+
 static Node new_node(Item it)
 {
 	Node new = malloc(sizeof(*new)); 

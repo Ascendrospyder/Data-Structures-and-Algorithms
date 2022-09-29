@@ -1,0 +1,34 @@
+Q1
+(a) 
+
+Q2
+Make will go ahead and run the file from top to bottom and left to right and
+
+Q3
+if the file is not defined then go ahead and define it in the next file, end the if later file
+
+Q4
+
+typedef struct node {
+	int data;
+	struct node *next;
+} Node;
+
+typedef Node *List;
+
+int listLength(List l)
+{
+    if (l == NULL) return 0; 
+    
+}
+
+int listLength(List l)
+{
+    if (l == NULL){
+        return 0; 
+    } else {
+        return 1 + listLength(l->next); 
+    }
+}
+
+Q5 

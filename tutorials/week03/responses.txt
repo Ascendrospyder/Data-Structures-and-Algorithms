@@ -1,0 +1,21 @@
+Question 1
+time complexity = worst case -> usually O(n)
+
+check the ith and nth - ith letter 
+isPalindrome(A[n])
+
+    frontIndex = 0;        1
+    backIndex = n - 1;     1
+
+    while frontIndex < backIndex:   n 
+    if A[frontIndex] != A[backIndex] return false;  n * 1 
+    else:
+    frontIndex++; 1 * n
+    backIndex--; 1 * n 
+    return true; 1 * n 
+
+
+time complexity = O(n) --> 2 + 5n --> n 
+
+Question 2
+(a) = A

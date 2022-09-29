@@ -29,7 +29,7 @@ static void testQueue1(void) {
 	for (int i = 1; i <= 10; i++) {
 		QueueEnqueue(q, i);
 	}
-	assert(QueueSize(q) == 10);
+	assert(QueueSize(q) == 10); 
 
 	// dequeue 1 to 5
 	for (int j = 1; j <= 5; j++) {

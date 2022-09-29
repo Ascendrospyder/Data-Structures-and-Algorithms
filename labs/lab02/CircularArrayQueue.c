@@ -51,6 +51,32 @@ void QueueFree(Queue q) {
  */
 void QueueEnqueue(Queue q, Item it) {
 	// TODO
+	// We add elements of a Queue in the back, when there are 
+	// more elements that then array's size, we circle back to the first index 
+	// and elements to the queue creating a cyclical structure 
+	assert(q != NULL); 
+	int index = q->frontIndex + q->size; // calculate the index 
+
+	if (index % q->capacity == q->frontIndex) // if the remainder of the index and the Queue's capacity is the front index, then go ahead
+	{
+		q->items = realloc(q->items, 2 * q->capacity * sizeof(int)); // increase the capacity of the queue 
+
+		int i = q->capacity; 
+		int j = 0; 
+	
+		while (i < (q->frontIndex + q->capacity))
+		{
+			q->items[i] = q->items[j]; 
+			i++; 
+			j++; 
+		} 
+		q->items[index] = it; 
+		q->size++; 
+		q->capacity = 2 * q->capacity; 	
+	} else {
+		q->items[(index) % q->capacity] = it; 
+		q->size++; 
+	}
 }
 
 /**
@@ -59,7 +85,11 @@ void QueueEnqueue(Queue q, Item it) {
  */
 Item QueueDequeue(Queue q) {
 	// TODO
-	return 0;
+	Item current = q->items[q->frontIndex]; 
+	q->frontIndex = (q->frontIndex + 1) % q->capacity; 
+	q->size--; 
+
+	return current; 
 }
 
 /**

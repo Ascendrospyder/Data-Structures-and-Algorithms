@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "Queue.h"
+#include "queue.h"
 
 #define DEFAULT_SIZE 16 // DO NOT change this line
 

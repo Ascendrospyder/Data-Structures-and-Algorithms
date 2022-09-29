@@ -4,14 +4,20 @@
 
 #include "list.h"
 
-typedef struct GraphRep *Graph; // we are typedefing the struct similar to BST one
-
 typedef int Vertex; 
 
 typedef struct Node {
   Vertex v; 
   struct Node *next; 
-} Node; 
+} Node;
+
+typedef struct GraphRep {
+  Node **edges; // 2d array of edges 
+  int nV; // number of vertices 
+  int nE; // number of edges 
+} GraphRep;  
+
+typedef struct GraphRep *Graph; // we are typedefing the struct similar to BST one
 
 typedef struct Edge {
   Vertex v; 
@@ -25,4 +31,4 @@ void GraphEdgeRemove(Graph, Edge);
 bool GraphAdjacent(Graph, Vertex, Vertex); 
 void GraphShow(Graph); 
 void GraphDestroy(Graph); 
-void findPathBFS(Graph, Vertex, Vertex); 
+// void findPathBFS(Graph, Vertex, Vertex); 
