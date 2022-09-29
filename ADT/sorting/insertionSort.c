@@ -27,6 +27,7 @@ void insertionSort(int *a, int low, int high)
   int i, j, value; // i will hold low + 1'th index, j will be a reference to compare the sorted section and value used to check if sorted section needs further swapping  
   for (i = low + 1; i <= high; i++) // we start at index low + 1 as we assume low'th index has been inserted 
   {
+    printArray(a, high - low + 1); 
     value = a[i]; // make value point to current index 
     for (j = i; j > low; j--)
     {
