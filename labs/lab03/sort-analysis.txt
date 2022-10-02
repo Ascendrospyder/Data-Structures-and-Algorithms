@@ -1,20 +1,53 @@
 Input      Initial    Number     Avg Time           Avg Time
 Size       Order      of Runs    for sortIntList    for sort
-10000      random     N          T1sec              T2sec
-10000      sorted     N          T1sec              T2sec
-10000      reverse    N          T1sec              T2sec
-20000      random     N          T1sec              T2sec
-20000      sorted     N          T1sec              T2sec
-20000      reverse    N          T1sec              T2sec
-40000      random     N          T1sec              T2sec
-40000      sorted     N          T1sec              T2sec
-40000      reverse    N          T1sec              T2sec
-100000     random     N          T1sec              T2sec
-100000     sorted     N          T1sec              T2sec
-100000     reverse    N          T1sec              T2sec
-TODO: add rows for larger input sizes
+10000      random     5          0.308sec           0.020sec
+10000      sorted     5          0.276sec           0.000sec
+10000      reverse    5          0.001sec           0.000sec
 
+20000      random     5          1.708sec           0.014sec
+20000      sorted     5          1.096sec           0.000sec
+20000      reverse    5          0.022sec           0.000sec
+
+40000      random     5          8.242sec           0.036sec
+40000      sorted     5          4.256sec           0.004sec
+40000      reverse    5          0.040sec           0.006sec
+
+60000      random     5          19.562sec          0.058sec
+60000      sorted     5          8.956sec           0.023sec
+60000      reverse    5          0.062sec           0.010sec
+
+100000     random     5          56.132sec          0.084sec
+100000     sorted     5          26.332sec          0.020sec
+100000     reverse    5          0.121sec           0.018sec
+
+200000     random     5          234.232sec         0.180sec
+200000     sorted     5          105.112sec         0.050sec
+200000     reverse    5          0.204sec           0.058sec
+==============================================================================================================================================
+commands: 
+SortIntList: 
+random = seq 200000 | sort -R | /usr/bin/time -f "%U" ./sortIntList > /dev/null
+sorted = seq 200000 | /usr/bin/time -f "%U" ./sortIntList > /dev/null
+reverse = seq 200000 | sort -nr | /usr/bin/time -f "%U" ./sortIntList > /dev/null
+
+sort:
+random = seq 200000 | sort -R | /usr/bin/time -f "%U" sort -n > /dev/null
+sorted = seq 200000 | /usr/bin/time -f "%U" sort -n > /dev/null
+reverse = seq 200000 | sort -nr | /usr/bin/time -f "%U" sort -n > /dev/null
+==============================================================================================================================================
 Explanation of timing results:
+From the tabulated results above it is quite apparent to recognise a trend in the results. The most observable trend that can be seen
+is that the linux sort program is significantly faster than my sort program as it takes significantly less time. This becomes really obvious 
+with larger input sizes from 20000 and onwards, where to sort random numbers my program took 1.708seconds whereas the linux program took 0.014 seconds.
+This 1.694 second difference is quite a significant leap compared to 10000 inputs where the difference was 0.288. Moreover, the order of the number also 
+has a strong effect on the run time of a program. Such can be seen from 100000 and onwards where both the linux program and my program had a significant difference
+in the run time between the different orders of numbers. Here we can see that random input takes in the longest time, followed by sorted and then reverse. 
 
+Upon theoretical analysis of the function IntListSortedCopy, it can be said that the time complexity is O(n), this being due to the while loop that runs for n times until the
+current node isn't null. As such, as the number of inputs are increased, this also means that it will take more time to sort the inputs on average as depicted by a linear trend with 
+a positive gradient. 
 
-
+We have seen that randomly generated numbers take the most time to sort, but why is this the case? This being due to the fact that the program needed to sort every input in the correct order
+where these numbers didn't have any observable pattern such as the ones being sorted or reversed. Moreover, it could be seen that sorted took more time to run that reverse, but why is this the case?
+This being as in my implementation, the program would traverse the whole LL until it reached the end where it could perform an insertion, this when compared to reverse order where it could just   
+be inserted into the head, in turn will save significant amount of time, especially with incredibly large numbers of inputs.   

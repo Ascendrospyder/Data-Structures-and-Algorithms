@@ -45,12 +45,11 @@ void printArray(int *array, int size) {
   printf("\n");
 }
 
-
 void merge(int *a, int low, int mid, int high)
 {
   int i, j, k, nItems = high - low + 1; 
 
-  int *current = malloc(nItems *sizeof(int)); 
+  int *current = malloc(nItems *sizeof(int)); // we need to create a new array which will hold our merged result 
 
   i = low; j = mid + 1; k = 0; 
 
