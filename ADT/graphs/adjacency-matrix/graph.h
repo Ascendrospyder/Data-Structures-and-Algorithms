@@ -1,6 +1,6 @@
 #include <stdbool.h>
 
-typedef struct GraphRep *Graph // we are typedefing the struct similar to BST one
+typedef struct GraphRep *Graph; // we are typedefing the struct similar to BST one
 
 typedef int Vertex; 
 
