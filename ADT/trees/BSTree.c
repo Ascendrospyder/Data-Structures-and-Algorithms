@@ -308,6 +308,52 @@ Tree insertAVL(Tree t, Item it)
   return t; 
 }
 
+int TreeNumNodes(Tree t)
+{
+  if (t == NULL)
+  {
+    return 0; 
+  } else {
+    return 1 + TreeNumNodes(t->left) + TreeNumNodes(t->right); 
+  }
+}
+/**
+ * @brief - This function will rearrange the index it is given to be at the root (note its not inserting but rearranging)
+ * 
+ * @param t - Tree 
+ * @param index - Index of what we want to rearrange 
+ * @return Tree 
+ */
+Tree TreePartion(Tree t, int index) 
+{
+  if (t != NULL) // if the tree isn't empty 
+  {
+    assert(0 <= index && index < TreeNumNodes(t));
+    int m = TreeNumNodes(t->left); // keep track of the amount of nodes on the left 
+    if (index < m) // if the index is less than the amount of nodes on the left then it exists there 
+    {
+	    t->left = partition(t->left, index); 
+	    t = TreeRotateRight(t);
+    } else if (index > m) { // if the index is more than the amount of nodes on left then exists at right section 
+	    t->right = partition(t->right, index - m - 1);
+	    t = rotateLeft(t);
+    }
+  }
+  return t;
+}
+
+Tree rebalance(Tree t) 
+{
+   int n = TreeNumNodes(t);
+   if (n >= 3) 
+   {
+      t = partition(t, n/2);           // put node with median key at root
+      t->left = rebalance(t->left);    // then rebalance each subtree
+      t->right = rebalance(t->right);
+   }
+   return t;
+}
+
 Tree search234Tree(Tree t, Item it)
 {
   if (t == NULL)

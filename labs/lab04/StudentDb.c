@@ -36,26 +36,19 @@ int compareByZid(Record r1, Record r2) {
  */
 int compareByName(Record r1, Record r2) {
     // TODO: Complete this function
-    // int compare_familyname = strcmp(r1->familyName, r2->familyName);
-    // int compare_givenname = strcmp(r1->givenName, r2->givenName);
-    char *family_name_1 = RecordGetFamilyName(r1); 
-    char *given_name_1 = RecordGetGivenName(r1);
-    char *family_name_2 = RecordGetFamilyName(r2);
-    char *given_name_2 = RecordGetGivenName(r2); 
+    int compare_familyname = strcmp(RecordGetFamilyName(r1), RecordGetFamilyName(r2)); 
+    int compare_givenname = strcmp(RecordGetGivenName(r1), RecordGetGivenName(r2)); 
 
-    int compare_familyname = strcmp(family_name_1, family_name_2); 
-    // printf("comparing family name: %d\n", compare_familyname);
-    int compare_givenname = strcmp(given_name_1, given_name_2); 
-    // printf("comparing given name: %d\n", compare_givenname);
-
-    if (compare_familyname != 0 && compare_givenname != 0)
+    if (compare_familyname != 0)
     {
         return compare_familyname; 
+    } else if (compare_givenname != 0) {
+        return compare_givenname;
     } else {
         return compareByZid(r1, r2); 
     }
 
-    return 0;
+    // return 0;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -122,7 +115,14 @@ Record DbFindByZid(StudentDb db, int zid) {
 
 List DbFindByName(StudentDb db, char *familyName, char *givenName) {
     // TODO: Complete this function
-    return ListNew();
+    Record lower_dummy = RecordNew(1, familyName, givenName); // lowest bound with lowest possible zId 
+    Record higher_dummy = RecordNew(9999999, familyName, givenName); // highest bound with highest possible zId
+
+    List l = TreeSearchBetween(db->byName, lower_dummy, higher_dummy); 
+    // since we created these dummies we need to free them 
+    RecordFree(lower_dummy); 
+    RecordFree(higher_dummy);
+    return l;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -133,4 +133,5 @@ void DbListByZid(StudentDb db) {
 
 void DbListByName(StudentDb db) {
     // TODO: Complete this function
+    TreeListInOrder(db->byName);
 }

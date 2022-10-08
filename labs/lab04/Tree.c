@@ -218,8 +218,6 @@ static void doTreeSearchBetween(Tree t, Node n, Record lower,
     {
         doTreeSearchBetween(t, n->right, lower, upper, l); 
     } 
-    
-    
 }
 
 ////////////////////////////////////////////////////////////////////////

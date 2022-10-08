@@ -1,0 +1,31 @@
+typedef struct BSTNode *BSTree;
+typedef struct BSTNode {
+	int value;
+	BSTree left;
+	BSTree right;
+} BSTNode;
+
+Question 3
+int BSTreeNumNodes(BSTree t)
+{
+  if (t == NULL)
+  {
+    return 0; 
+  } else {
+    return 1 + BSTreeNumNodes(t->left) + BSTreeNumNodes(t->right); 
+  }
+}
+
+Question 4
+int BSTreeCountOdds(BSTree t)
+{
+  int odd_counter = 0; 
+  if (t == NULL) return 0; 
+  else if ((t->value % 2) == 1)
+  {
+    counter++;
+    BSTreeCountOdds(t->left);  
+    BSTreeCountOdds(t->right); 
+  }
+  return counter; 
+}

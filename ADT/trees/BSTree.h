@@ -14,3 +14,5 @@ Tree TreeRotateRight(Tree t);
 Tree TreeRotateLeft(Tree t); 
 Tree InsertAtRoot(Tree t, Item it); 
 Tree insertAVL(Tree t, Item it); 
+Tree TreePartion(Tree t, int index); 
+int TreeNumNodes(Tree t); 
