@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include <stdbool.h>
 
 #include "graph.h" 
 #include "list.h"
@@ -67,7 +68,7 @@ bool findPathBFS(Graph g, Vertex src, Vertex dest)
     {
       if (GraphAdjacent(g, v, w) && visited[w] == -1) // check if nodes are adjacent and havent been visited yet
       {
-        visited[w] = v; 
+        visited[w] = v; // I got to index w from v mark it in visited array 
         if (w == dest) // if w is what we are looking for mark it as found 
         {
           return true; 
