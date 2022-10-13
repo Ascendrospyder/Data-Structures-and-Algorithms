@@ -16,7 +16,7 @@
 #define MAX_DEPARTURE_MINUTE 59
 #define DURATION_MINUTES 0 
 #define MIN_FLIGHT_NUMBER "0" 
-#define MAXIMUM_FLIGHT_NUMBER "zzzzzzzz"
+#define MAXIMUM_FLIGHT_NUMBER "ZZZZZZZZ"
 
 struct flightDb {
     Tree flightNumber; 
@@ -110,66 +110,112 @@ List DbFindBetweenTimes(FlightDb db,
 
 Record DbFindNextFlight(FlightDb db, char *flightNumber, 
                         int day, int hour, int min) {
-    return NULL;
+    Record dummy_one = RecordNew(flightNumber, " ", " ", day, hour, min, DURATION_MINUTES);
+    Record rec = TreeNext(db->flightNumber, dummy_one);
+
+    RecordFree(dummy_one); 
+
+    if (rec != NULL && strcmp(RecordGetFlightNumber(rec), flightNumber) == 0) // if record is not empty and it matches with the departure airport, we found next airport 
+    {
+        return rec; 
+    } else { // if not found we need to wrap to next week, we will utilise a min dummy for this 
+        Record dummy_minimum = RecordNew(MIN_FLIGHT_NUMBER, " ", " ", MIN_DEPARTURE_DAY, MIN_DEPARTURE_HOUR, MIN_DEPARTURE_MINUTE, DURATION_MINUTES); 
+        Record wrap_rec = TreeNext(db->flightNumber, dummy_minimum); 
+
+        if (wrap_rec != NULL && (strcmp(RecordGetFlightNumber(wrap_rec), flightNumber) != 0)) // this means that if the flight was not found after wrap return NULL
+        {
+            return NULL; 
+        }
+
+        return wrap_rec; 
+    }
 }
 ////////////////////////// Helper Functions ///////////////////////////////////
 static int compareFlightNumber(Record record1, Record record2) 
 {
     int compareFlightNumber = strcmp(RecordGetFlightNumber(record1), RecordGetFlightNumber(record2)); 
-    int compareDepartureDay = RecordGetDepartureDay(record1) - RecordGetDepartureDay(record2); 
-    int compareDepartureHour = RecordGetDepartureHour(record1) - RecordGetDepartureHour(record1);
-    int compareDepartureMinute = RecordGetDepartureMinute(record1) - RecordGetDepartureMinute(record2);  
 
     if (compareFlightNumber != 0)
     {
         return compareFlightNumber; 
-    } else if (compareDepartureDay != 0) {
-        return compareDepartureDay; 
-    } else if (compareDepartureHour != 0) {
-        return compareDepartureHour; 
-    } else {
-        return compareDepartureMinute; 
     }
+
+    int compareDepartureDay = RecordGetDepartureDay(record1) - RecordGetDepartureDay(record2); 
+
+    if (compareDepartureDay != 0)
+    {
+        return compareDepartureDay; 
+    }
+
+
+    int compareDepartureHour = RecordGetDepartureHour(record1) - RecordGetDepartureHour(record2);
+
+    if (compareDepartureHour != 0)
+    {
+        return compareDepartureHour; 
+    }
+
+    return RecordGetDepartureMinute(record1) - RecordGetDepartureMinute(record2);  
 }
 
 static int compareTime(Record record1, Record record2)
 {
     int compareDepartureDay = RecordGetDepartureDay(record1) - RecordGetDepartureDay(record2); 
-    int compareDepartureHour = RecordGetDepartureHour(record1) - RecordGetDepartureHour(record1);
-    int compareDepartureMinute = RecordGetDepartureMinute(record1) - RecordGetDepartureMinute(record2);  
-    int compareFlightNumber = strcmp(RecordGetFlightNumber(record1), RecordGetFlightNumber(record2)); 
 
     if (compareDepartureDay != 0)
     {
         return compareDepartureDay; 
-    } else if (compareDepartureHour != 0) {
-        return compareDepartureHour; 
-    } else if (compareDepartureMinute != 0) {
-        return compareDepartureMinute; 
-    } else {
-        return compareFlightNumber; 
     }
+
+    int compareDepartureHour = RecordGetDepartureHour(record1) - RecordGetDepartureHour(record2);
+    
+    if (compareDepartureHour != 0)
+    {
+        return compareDepartureHour;
+    }
+
+    int compareDepartureMinute = RecordGetDepartureMinute(record1) - RecordGetDepartureMinute(record2);  
+    
+    if (compareDepartureMinute != 0)
+    {
+        return compareDepartureMinute; 
+    }
+    
+    return strcmp(RecordGetFlightNumber(record1), RecordGetFlightNumber(record2)); 
 }
 
 static int compareDeparture(Record record1, Record record2)
 {
     int compareDepartureAirport = strcmp(RecordGetDepartureAirport(record1), RecordGetDepartureAirport(record2));
-    int compareDepartureDay = RecordGetDepartureDay(record1) - RecordGetDepartureDay(record2); 
-    int compareDepartureHour = RecordGetDepartureHour(record1) - RecordGetDepartureHour(record1);
-    int compareDepartureMinute = RecordGetDepartureMinute(record1) - RecordGetDepartureMinute(record2);  
-    int compareFlightNumber = strcmp(RecordGetFlightNumber(record1), RecordGetFlightNumber(record2)); 
 
     if (compareDepartureAirport != 0)
     {
         return compareDepartureAirport; 
-    } else if (compareDepartureDay != 0) {
-        return compareDepartureDay; 
-    } else if (compareDepartureHour != 0) {
-        return compareDepartureHour; 
-    } else if (compareDepartureMinute != 0) {
-        return compareDepartureMinute; 
-    } else {
-        return compareFlightNumber; 
     }
+
+
+    int compareDepartureDay = RecordGetDepartureDay(record1) - RecordGetDepartureDay(record2); 
+    
+    if (compareDepartureDay != 0)
+    {
+        return compareDepartureDay; 
+    }
+
+
+    int compareDepartureHour = RecordGetDepartureHour(record1) - RecordGetDepartureHour(record2);
+    
+    if (compareDepartureHour != 0)
+    {
+        return compareDepartureHour; 
+    }
+
+    int compareDepartureMinute = RecordGetDepartureMinute(record1) - RecordGetDepartureMinute(record2);  
+    
+    if (compareDepartureMinute != 0)
+    {
+        return compareDepartureMinute; 
+    }
+
+    return strcmp(RecordGetFlightNumber(record1), RecordGetFlightNumber(record2)); 
 }
 ////////////////////////// Helper Functions ///////////////////////////////////

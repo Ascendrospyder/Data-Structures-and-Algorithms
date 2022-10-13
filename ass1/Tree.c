@@ -289,21 +289,25 @@ static void doTreeSearchBetween(Tree t, Node n, Record lower, Record upper, List
         return; 
     }
 
-    int compare_lower = t->compare(n->rec, lower); 
-    int compare_higher = t->compare(n->rec, upper); 
+    int compare_lower = t->compare(lower, n->rec); 
+    int compare_higher = t->compare(upper, n->rec); 
 
     // to have an inorder print, left -> root -> right
 
     if (compare_lower < 0) // if the record is higher than the lower bound, traverse left section
     {
-        doTreeSearchBetween(t, n->right, lower, upper, l); 
-    } else if (compare_higher > 0) {// if the record is higher than the higher bound, traverse right section
         doTreeSearchBetween(t, n->left, lower, upper, l); 
-    } else {
-        doTreeSearchBetween(t, n->left, lower, upper, l); 
-        ListAppend(l, n->rec);
-        doTreeSearchBetween(t, n->right, lower, upper, l);
+    } 
+
+    if (compare_higher >= 0 && compare_lower <= 0) // else go ahead and add to the list!
+    { 
+        ListAppend(l, n->rec); 
     }
+    
+    if (compare_higher > 0) // if the record is higher than the higher bound, traverse right section
+    {
+        doTreeSearchBetween(t, n->right, lower, upper, l); 
+    } 
 }
 
 static void doTreeNext(Tree t, Node n, Record rec, Record *next)

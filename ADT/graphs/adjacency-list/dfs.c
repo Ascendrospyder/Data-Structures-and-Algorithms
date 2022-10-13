@@ -18,7 +18,7 @@ bool dfsPathCheck(Graph g, int nV, Vertex v, Vertex dest)
 			if (w == dest)
 			{
 				return true;
-			} else if (dfsPathCheck(g, nV, w, dest)) {
+			} else if (dfsPathCheck(g, nV, w, dest)) { // recursive call here introduces the concept of backtracking 
 				return true;
 			}
 		}
