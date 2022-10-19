@@ -181,7 +181,6 @@ Record DbFindNextFlight(FlightDb db, char *flightNumber,
         {
             return NULL; 
         }
-        // printf("I am here!\n");
         return wrap_rec; 
     }
 }
