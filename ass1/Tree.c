@@ -65,6 +65,7 @@ static void doTreeFree(Node n, bool freeRecords) {
 
 ////////////////////////////////////////////////////////////////////////
 // Functions you need to implement
+
 ////////////////////////// function declarations //////////////////////
 static int getHeight(Node n); 
 static Node TreeRotateRight(Node n); 
@@ -76,6 +77,8 @@ static void doTreeSearchBetween(Tree t, Node n, Record lower, Record higher, Lis
 static void doTreeNext(Tree t, Node n, Record rec, Record *next); 
 // static void printTree(Tree t); 
 ////////////////////////// function declarations //////////////////////
+
+
 /**
  * @brief - This function is used for inserting a record into the tree and 
  * updating it as true or false if it has or hasn't been inserted, respectively. 
@@ -117,7 +120,6 @@ Record TreeSearch(Tree t, Record rec)
 List TreeSearchBetween(Tree t, Record lower, Record upper) {
     List l = ListNew();
     doTreeSearchBetween(t, t->root, lower, upper, l);
-    // printTree(t); 
     return l;  
 }
 
@@ -170,7 +172,7 @@ static Node createNewNode(Record rec)
  */
 static int getHeight(Node n)
 { 
-    // adapted from lecture code 
+    // adapted from lecture code on avl trees  
     if (n == NULL)
     {
       return 0;
@@ -196,15 +198,16 @@ static int getHeight(Node n)
  */
 static Node TreeRotateRight(Node n)
 {
-  Node current = n->left; // set up a new root and make it point to the left tree 
-  if (n == NULL || current == NULL) // if trees our empty return our original tree 
-  {
-    return n; 
-  } else {
-    n->left = current->right; 
-    current->right = n; 
-    return current; 
-  }
+    // The following code was adapted from the lecture code on tree rotations 
+    Node current = n->left; // set up a new root and make it point to the left tree 
+    if (n == NULL || current == NULL) // if trees our empty return our original tree 
+    {
+      return n; 
+    } else {
+      n->left = current->right; 
+      current->right = n; 
+      return current; 
+    }
 }
 
 /**
@@ -215,26 +218,27 @@ static Node TreeRotateRight(Node n)
  */
 static Node TreeRotateLeft(Node n)
 {
-  Node current = n->right; // setup a current node which will point to n->right
-  if (n == NULL || current == NULL) // if the node, or current doesn't exist return n
-  {
-    return n; 
-  } else {
-    n->right = current->left;  // assigns n->right with the 
-    current->left = n; 
-    return current; 
-  }
+    // The following code was adapted from the lecture code on tree rotations 
+    Node current = n->right; // setup a current node which will point to n->right
+    if (n == NULL || current == NULL) // if the node, or current doesn't exist return n
+    {
+      return n; 
+    } else {
+      n->right = current->left;  // assigns n->right with the 
+      current->left = n; 
+      return current; 
+    }
 }
 
 /**
  * @brief - The following function is a helper function for TreeInsert and will basically
  * perform the insertion. Inserts a record into the tree. 
  * 
- * @param t 
- * @param rec 
- * @param n 
- * @param result 
- * @return Node 
+ * @param t - Tree t
+ * @param rec - Record rec 
+ * @param n - Node n 
+ * @param result - bool *result 
+ * @return Node - node to insert 
  */
 static Node doTreeInsert(Tree t, Record rec, Node n, bool *result)
 {
@@ -260,7 +264,7 @@ static Node doTreeInsert(Tree t, Record rec, Node n, bool *result)
     int lheight = getHeight(n->left);
     int rheight = getHeight(n->right); 
 
-    // the following code will rebalance the inserted node     
+    // the following code will rebalance the inserted node and is an adapted version of the lecture code on avl trees     
     if ((lheight - rheight) > 1) // if the balance factor is unbalanced then proceed below 
     {
         int compare_left = t->compare(rec, n->left->rec);
@@ -271,7 +275,7 @@ static Node doTreeInsert(Tree t, Record rec, Node n, bool *result)
         n = TreeRotateRight(n); // after rotating to the left we need to rotate it to the right to ensure balance 
     } else if ((rheight - lheight) > 1) { 
         int compare_right = t->compare(rec, n->right->rec); 
-        if (compare_right < 0) // this  is a RL imbalance, therfore we need to first rotate to the right and then left 
+        if (compare_right < 0) // this is a RL imbalance, therfore we need to first rotate to the right and then left 
         {
             n->right = TreeRotateRight(n->right); 
         }
@@ -283,9 +287,9 @@ static Node doTreeInsert(Tree t, Record rec, Node n, bool *result)
 /**
  * @brief - the following function is a helper function for TreeSearch. 
  * 
- * @param t 
- * @param n 
- * @param rec 
+ * @param t - Tree t 
+ * @param n - Node n 
+ * @param rec - Record rec 
  * @return Record 
  */
 static Record doTreeSearch(Tree t, Node n, Record rec)
@@ -310,11 +314,11 @@ static Record doTreeSearch(Tree t, Node n, Record rec)
 /**
  * @brief - The following function is the helper function for TreeSearchBetween. 
  * 
- * @param t 
- * @param n 
- * @param lower 
- * @param upper 
- * @param l 
+ * @param t - Tree t
+ * @param n - Node n 
+ * @param lower - Record lower bound 
+ * @param upper - Record upper bound 
+ * @param l - List l 
  */
 static void doTreeSearchBetween(Tree t, Node n, Record lower, Record upper, List l)
 {
@@ -348,10 +352,10 @@ static void doTreeSearchBetween(Tree t, Node n, Record lower, Record upper, List
 /**
  * @brief - The following function is a helper function for TreeNext. 
  * 
- * @param t 
- * @param n 
- * @param rec 
- * @param next 
+ * @param t - Tree t 
+ * @param n - Node n  
+ * @param rec - Record rec 
+ * @param next - Record *next 
  */
 static void doTreeNext(Tree t, Node n, Record rec, Record *next)
 {
@@ -369,31 +373,31 @@ static void doTreeNext(Tree t, Node n, Record rec, Record *next)
 }
 ////////////////////////////////// testing //////////////////////////////////////////////////////
 
-/**
- * @brief - The following function is the helper function for printTree for further debugging. 
- * 
- * @param n - Node n 
- */
-static void doPrintTree(Node n)
-{
-    if (n == NULL) return;
+// /**
+//  * @brief - The following function is the helper function for printTree for further debugging. 
+//  * 
+//  * @param n - Node n 
+//  */
+// static void doPrintTree(Node n)
+// {
+//     if (n == NULL) return;
 
-    // preorder print 
-    printf("%s| %s | %s |%d %d00 | %d\n", RecordGetFlightNumber(n->rec), RecordGetDepartureAirport(n->rec), 
-                                            RecordGetArrivalAirport(n->rec),  RecordGetDepartureDay(n->rec), 
-                                            RecordGetDepartureHour(n->rec), RecordGetDurationMinutes(n->rec));
-    doPrintTree(n->left);
-    doPrintTree(n->right); 
-}
+//     // preorder print 
+//     printf("%s| %s | %s |%d %d00 | %d\n", RecordGetFlightNumber(n->rec), RecordGetDepartureAirport(n->rec), 
+//                                             RecordGetArrivalAirport(n->rec),  RecordGetDepartureDay(n->rec), 
+//                                             RecordGetDepartureHour(n->rec), RecordGetDurationMinutes(n->rec));
+//     doPrintTree(n->left);
+//     doPrintTree(n->right); 
+// }
 
-/**
- * @brief - The following function basically prints the tree out for debugging to check if insertion 
- * is correct. 
- * 
- * @param t - Tree t 
- */
-static void printTree(Tree t) 
-{
-    doPrintTree(t->root); 
-    printf("\n"); 
-}
+// /**
+//  * @brief - The following function basically prints the tree out for debugging to check if insertion 
+//  * is correct. 
+//  * 
+//  * @param t - Tree t 
+//  */
+// static void printTree(Tree t) 
+// {
+//     doPrintTree(t->root); 
+//     printf("\n"); 
+// }
