@@ -29,6 +29,12 @@ static int compareFlightNumber(Record record1, Record record2);
 static int compareTime(Record record1, Record record2); 
 static int compareDeparture(Record record1, Record record2); 
 ///////////////////////////////// Function Declarations //////////////////////
+
+/**
+ * @brief - The following function creates a new flight DB
+ * 
+ * @return FlightDb - The new FlightDb 
+ */
 FlightDb DbNew(void) {
     FlightDb database = malloc(sizeof(*database));
 
@@ -46,6 +52,11 @@ FlightDb DbNew(void) {
     return database; 
 }
 
+/**
+ * @brief - The following function frees all memory associated with the given DB
+ * 
+ * @param db - FlightDb db 
+ */
 void DbFree(FlightDb db) 
 {
     // free every element in the struct and finally free the database
@@ -55,6 +66,17 @@ void DbFree(FlightDb db)
     free(db); 
 }
 
+/**
+ * @brief - Inserts a flight record into the given DB if the DB does not already contain a 
+ * record with the same flight number and departure day, hour and minute. Returns true if 
+ * the record was inserted into the DB, and false if the DB already contained a record with 
+ * the same flight number and departure day, hour and minute.
+ * 
+ * @param db - FlightDb db 
+ * @param r - Record r 
+ * @return true - if record was successfully inserted into the db 
+ * @return false - if the record was not inserted into the db 
+ */
 bool DbInsertRecord(FlightDb db, Record r) {
     // start by inserting one thing, if it returns true insert the rest
     if (TreeInsert(db->flightNumber, r))
@@ -67,10 +89,22 @@ bool DbInsertRecord(FlightDb db, Record r) {
     }
 }
 
+/**
+ * @brief - Searches for all records with the given flight number, and returns them 
+ * all in a list in increasing order of (day, hour, minute). Returns an empty list if 
+ * there are no such records.
+ * 
+ * @param db - FlightDb db 
+ * @param flightNumber - char *flightNumber 
+ * @return List - new list of all the flights based on the flight number in between 
+ * the lower and upper bound inputs (inclusive)
+ */
 List DbFindByFlightNumber(FlightDb db, char *flightNumber) {
     // set up a lower and higher bound dummy to perform the search 
-    Record lowerBoundDummy = RecordNew(flightNumber, " ", " ", MIN_DEPARTURE_DAY, MIN_DEPARTURE_HOUR, MIN_DEPARTURE_MINUTE, DURATION_MINUTES);
-    Record higherBoundDummy = RecordNew(flightNumber, " ", " ", MAX_DEPARTURE_DAY, MAX_DEPARTURE_HOUR, MAX_DEPARTURE_MINUTE, DURATION_MINUTES);  
+    Record lowerBoundDummy = RecordNew(flightNumber, " ", " ", MIN_DEPARTURE_DAY, MIN_DEPARTURE_HOUR,
+                                        MIN_DEPARTURE_MINUTE, DURATION_MINUTES);
+    Record higherBoundDummy = RecordNew(flightNumber, " ", " ", MAX_DEPARTURE_DAY, MAX_DEPARTURE_HOUR, 
+                                        MAX_DEPARTURE_MINUTE, DURATION_MINUTES);  
 
     List l = TreeSearchBetween(db->flightNumber, lowerBoundDummy, higherBoundDummy); 
 
@@ -80,11 +114,24 @@ List DbFindByFlightNumber(FlightDb db, char *flightNumber) {
     return l; 
 }
 
-
+/**
+ * @brief - Searches for all records with the given departure airport and day 
+ * of the week, and returns them all in a list in increasing order of 
+ * (hour, minute, flight number). Returns an empty list if there are no 
+ * such records.
+ * 
+ * @param db - FlightDb db 
+ * @param departureAirport - char *departureAirport 
+ * @param day - int day  
+ * @return List - list with all flights based on departure airport day between 
+ * lower and upper bound (inclusive)
+ */
 List DbFindByDepartureAirportDay(FlightDb db, char *departureAirport,
                                  int day) {
-    Record lowerBoundDummy = RecordNew(MIN_FLIGHT_NUMBER, departureAirport, " ", day, MIN_DEPARTURE_HOUR, MIN_DEPARTURE_MINUTE, DURATION_MINUTES);
-    Record higherBoundDummy = RecordNew(MAXIMUM_FLIGHT_NUMBER, departureAirport, " ", day, MAX_DEPARTURE_HOUR, MAX_DEPARTURE_MINUTE, DURATION_MINUTES);  
+    Record lowerBoundDummy = RecordNew(MIN_FLIGHT_NUMBER, departureAirport, " ", day, MIN_DEPARTURE_HOUR, 
+                                        MIN_DEPARTURE_MINUTE, DURATION_MINUTES);
+    Record higherBoundDummy = RecordNew(MAXIMUM_FLIGHT_NUMBER, departureAirport, " ", day, 
+                                        MAX_DEPARTURE_HOUR, MAX_DEPARTURE_MINUTE, DURATION_MINUTES);  
 
     List l = TreeSearchBetween(db->dayOfDeparture, lowerBoundDummy, higherBoundDummy); 
 
@@ -104,14 +151,14 @@ List DbFindByDepartureAirportDay(FlightDb db, char *departureAirport,
     from the start of the week to (day2, hour2, min2). In this case, the records from (day1, hour1, min1)
     to the end of the week should appear first in the list. 
  * 
- * @param db 
- * @param day1 
- * @param hour1 
- * @param min1 
- * @param day2 
- * @param hour2 
- * @param min2 
- * @return List 
+ * @param db - Flight db 
+ * @param day1 - int day1
+ * @param hour1 - int hour1
+ * @param min1 - int min1
+ * @param day2 - int day2
+ * @param hour2 - int hour2
+ * @param min2 - int min2 
+ * @return List - list will all flights between lower and upper bound times (inclusive)
  */
 List DbFindBetweenTimes(FlightDb db, 
                         int day1, int hour1, int min1, 
@@ -125,20 +172,24 @@ List DbFindBetweenTimes(FlightDb db,
     {
         l = TreeSearchBetween(db->time, lowerBoundDummy, higherBoundDummy);
     } else {
+        // keep track of a record at the end of the week and beginning of the week  
+        Record endOfWeek = RecordNew(MIN_FLIGHT_NUMBER, " ", " ", MAX_DEPARTURE_DAY, MAX_DEPARTURE_HOUR, 
+                                        MAX_DEPARTURE_MINUTE, DURATION_MINUTES);
+        Record beginningOfWeek = RecordNew(MAXIMUM_FLIGHT_NUMBER, " ", " ", MIN_DEPARTURE_DAY, 
+                                            MIN_DEPARTURE_HOUR, MIN_DEPARTURE_MINUTE, DURATION_MINUTES); 
         
-        Record endOfDay = RecordNew(MIN_FLIGHT_NUMBER, " ", " ", MAX_DEPARTURE_DAY, MAX_DEPARTURE_HOUR, MAX_DEPARTURE_MINUTE, DURATION_MINUTES);
-        Record beginningOfDay = RecordNew(MAXIMUM_FLIGHT_NUMBER, " ", " ", MIN_DEPARTURE_DAY, MIN_DEPARTURE_HOUR, MIN_DEPARTURE_MINUTE, DURATION_MINUTES); 
-        
-        l = TreeSearchBetween(db->time, lowerBoundDummy, endOfDay);
-        List toBeAdded = TreeSearchBetween(db->time, beginningOfDay, higherBoundDummy); 
+        // if we need to wrap to the next week we need to spilt searches e.g. first check for lower <= flights <= endOfWeek 
+        // then check beginningOfWeek <= flights <= upper
+        l = TreeSearchBetween(db->time, lowerBoundDummy, endOfWeek);
+        List toBeAdded = TreeSearchBetween(db->time, beginningOfWeek, higherBoundDummy); 
         
         // join both the lists 
         ListExtend(l, toBeAdded); 
 
         // finally free the dummy records and the new list made 
         ListFree(toBeAdded); 
-        RecordFree(endOfDay); 
-        RecordFree(beginningOfDay); 
+        RecordFree(endOfWeek); 
+        RecordFree(beginningOfWeek); 
     } 
 
     RecordFree(lowerBoundDummy); 
@@ -148,16 +199,17 @@ List DbFindBetweenTimes(FlightDb db,
 }
 
 /**
- * @brief - Searches for the earliest next flight with the given flight number, on or after the given (day, hour, minute), or NULL if there is no such flight.
-    Note: This function must be able to wrap around to the beginning of the next week if there are no such flights later in the week. Note that the flight schedule is 
-    the same every week. 
+ * @brief - Searches for the earliest next flight with the given flight number, on or after
+ * the given (day, hour, minute), or NULL if there is no such flight. 
+ * Note: This function must be able to wrap around to the beginning of the next week if there 
+ * are no such flights later in the week. Note that the flight schedule is the same every week. 
  * 
- * @param db 
- * @param flightNumber 
- * @param day 
- * @param hour 
- * @param min 
- * @return Record 
+ * @param db - FlightDb db 
+ * @param flightNumber - char *flightNumber 
+ * @param day - int day 
+ * @param hour - int hour 
+ * @param min - int min 
+ * @return Record - Record of the next available flight
  */
 Record DbFindNextFlight(FlightDb db, char *flightNumber, 
                         int day, int hour, int min) {
@@ -167,18 +219,19 @@ Record DbFindNextFlight(FlightDb db, char *flightNumber,
 
     RecordFree(dummy_one); 
 
-    if (rec != NULL && strcmp(RecordGetFlightNumber(rec), flightNumber) == 0) // if record is not empty and it matches with the departure airport, we found next airport 
-    {
+    if (rec != NULL && strcmp(RecordGetFlightNumber(rec), flightNumber) == 0) // if record is not empty 
+    { // and it matches with the departure airport, we found next airport 
         return rec;  
 
     } else { // if not found we need to wrap to next week, we will utilise a min dummy for this 
-        Record dummy_minimum = RecordNew(flightNumber, " ", " ", MIN_DEPARTURE_DAY, MIN_DEPARTURE_HOUR, MIN_DEPARTURE_MINUTE, DURATION_MINUTES); 
+        Record dummy_minimum = RecordNew(flightNumber, " ", " ", MIN_DEPARTURE_DAY, 
+                                            MIN_DEPARTURE_HOUR, MIN_DEPARTURE_MINUTE, DURATION_MINUTES); 
         Record wrap_rec = TreeNext(db->flightNumber, dummy_minimum); 
 
         RecordFree(dummy_minimum); 
 
-        if (wrap_rec != NULL && (strcmp(RecordGetFlightNumber(wrap_rec), flightNumber) != 0)) // this means that if the flight was not found after wrap return NULL
-        {
+        if (wrap_rec != NULL && (strcmp(RecordGetFlightNumber(wrap_rec), flightNumber) != 0)) // this means that if the flight 
+        { // was not found after wrap return NULL
             return NULL; 
         }
         return wrap_rec; 
