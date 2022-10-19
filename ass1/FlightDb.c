@@ -16,7 +16,7 @@
 #define MAX_DEPARTURE_MINUTE 59
 #define DURATION_MINUTES 0 
 #define MIN_FLIGHT_NUMBER "0" 
-#define MAXIMUM_FLIGHT_NUMBER "ZZZZZZZZ"
+#define MAXIMUM_FLIGHT_NUMBER "zzzzzzzz"
 
 struct flightDb {
     Tree flightNumber; 
@@ -94,13 +94,53 @@ List DbFindByDepartureAirportDay(FlightDb db, char *departureAirport,
     return l; 
 }
 
+/**
+ * @brief - Searches for all records with departure times between 
+    (day1, hour1, min1) and (day2, hour2, min2) (inclusive), 
+    and returns them all in a list in increasing order of (day, hour, minute, flight number). 
+    Returns an empty list if there are no such records.
+    Note: It is possible for (day1, hour1, min1) to be later in the week than (day2, hour2, min2),
+    in which case you should return all records from (day1, hour1, min1) to the end of the week and 
+    from the start of the week to (day2, hour2, min2). In this case, the records from (day1, hour1, min1)
+    to the end of the week should appear first in the list. 
+ * 
+ * @param db 
+ * @param day1 
+ * @param hour1 
+ * @param min1 
+ * @param day2 
+ * @param hour2 
+ * @param min2 
+ * @return List 
+ */
 List DbFindBetweenTimes(FlightDb db, 
                         int day1, int hour1, int min1, 
                         int day2, int hour2, int min2) {
+                            
     Record lowerBoundDummy = RecordNew(MIN_FLIGHT_NUMBER, " ", " ", day1, hour1, min1, DURATION_MINUTES);
-    Record higherBoundDummy = RecordNew(MAXIMUM_FLIGHT_NUMBER, " ", " ", day2, hour2, min2, DURATION_MINUTES);  
+    Record higherBoundDummy = RecordNew(MAXIMUM_FLIGHT_NUMBER, " ", " ", day2, hour2, min2, DURATION_MINUTES); 
 
-    List l = TreeSearchBetween(db->time, lowerBoundDummy, higherBoundDummy); 
+    List l; 
+    if (day1 <= day2 && hour1 <= hour2 && min1 <= min2)
+    {
+        l = TreeSearchBetween(db->time, lowerBoundDummy, higherBoundDummy);
+    } else {
+        // Record wrap = TreeNext(db->time, lowerBoundDummy); 
+        Record endOfDay = RecordNew(MIN_FLIGHT_NUMBER, " ", " ", MAX_DEPARTURE_DAY, MAX_DEPARTURE_HOUR, MAX_DEPARTURE_MINUTE, DURATION_MINUTES);
+        Record beginningOfDay = RecordNew(MAXIMUM_FLIGHT_NUMBER, " ", " ", MIN_DEPARTURE_DAY, MIN_DEPARTURE_HOUR, MIN_DEPARTURE_MINUTE, DURATION_MINUTES); 
+        
+        l = TreeSearchBetween(db->time, lowerBoundDummy, endOfDay);
+        List toBeAdded = TreeSearchBetween(db->time, beginningOfDay, higherBoundDummy); 
+        
+        // join both the lists 
+        ListExtend(l, toBeAdded); 
+
+        // finally free the dummy records 
+        ListFree(toBeAdded); 
+        RecordFree(endOfDay); 
+        RecordFree(beginningOfDay); 
+        
+    } 
 
     RecordFree(lowerBoundDummy); 
     RecordFree(higherBoundDummy); 
@@ -108,6 +148,18 @@ List DbFindBetweenTimes(FlightDb db,
     return l; 
 }
 
+/**
+ * @brief - Searches for the earliest next flight with the given flight number, on or after the given (day, hour, minute), or NULL if there is no such flight.
+    Note: This function must be able to wrap around to the beginning of the next week if there are no such flights later in the week. Note that the flight schedule is 
+    the same every week. 
+ * 
+ * @param db 
+ * @param flightNumber 
+ * @param day 
+ * @param hour 
+ * @param min 
+ * @return Record 
+ */
 Record DbFindNextFlight(FlightDb db, char *flightNumber, 
                         int day, int hour, int min) {
     Record dummy_one = RecordNew(flightNumber, " ", " ", day, hour, min, DURATION_MINUTES);
@@ -121,6 +173,8 @@ Record DbFindNextFlight(FlightDb db, char *flightNumber,
     } else { // if not found we need to wrap to next week, we will utilise a min dummy for this 
         Record dummy_minimum = RecordNew(MIN_FLIGHT_NUMBER, " ", " ", MIN_DEPARTURE_DAY, MIN_DEPARTURE_HOUR, MIN_DEPARTURE_MINUTE, DURATION_MINUTES); 
         Record wrap_rec = TreeNext(db->flightNumber, dummy_minimum); 
+
+        RecordFree(dummy_minimum); 
 
         if (wrap_rec != NULL && (strcmp(RecordGetFlightNumber(wrap_rec), flightNumber) != 0)) // this means that if the flight was not found after wrap return NULL
         {

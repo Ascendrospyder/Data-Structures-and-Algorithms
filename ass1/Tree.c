@@ -74,6 +74,7 @@ static Node createNewNode(Record rec);
 static Record doTreeSearch(Tree t, Node n, Record rec); 
 static void doTreeSearchBetween(Tree t, Node n, Record lower, Record higher, List l); 
 static void doTreeNext(Tree t, Node n, Record rec, Record *next); 
+// static void printTree(Tree t); 
 ////////////////////////// function declarations //////////////////////
 /**
  * @brief - This function is used for inserting a record into the tree and 
@@ -114,6 +115,7 @@ Record TreeSearch(Tree t, Record rec)
 List TreeSearchBetween(Tree t, Record lower, Record upper) {
     List l = ListNew();
     doTreeSearchBetween(t, t->root, lower, upper, l);
+    // printTree(t); 
     return l;  
 }
 /**
@@ -292,7 +294,7 @@ static void doTreeSearchBetween(Tree t, Node n, Record lower, Record upper, List
     int compare_lower = t->compare(lower, n->rec); 
     int compare_higher = t->compare(upper, n->rec); 
 
-    // to have an inorder print, left -> root -> right
+    // to have an inorder traversal, left -> root -> right
 
     if (compare_lower < 0) // if the record is higher than the lower bound, traverse left section
     {
@@ -324,3 +326,20 @@ static void doTreeNext(Tree t, Node n, Record rec, Record *next)
         return doTreeNext(t, n->left, rec, next);
     }
 }
+////////////////////////////////// testing //////////////////////////////////////////////////////
+// static void doPrintTree(Node n)
+// {
+//     if (n == NULL) return;
+
+//     // preorder print 
+//     printf("%s| %s | %s |%d %d00 | %d\n", RecordGetFlightNumber(n->rec), RecordGetDepartureAirport(n->rec), 
+//                                             RecordGetArrivalAirport(n->rec),  RecordGetDepartureDay(n->rec), 
+//                                             RecordGetDepartureHour(n->rec), RecordGetDurationMinutes(n->rec));
+//     doPrintTree(n->left);
+//     doPrintTree(n->right); 
+// }
+// static void printTree(Tree t) 
+// {
+//     doPrintTree(t->root); 
+//     printf("\n"); 
+// }

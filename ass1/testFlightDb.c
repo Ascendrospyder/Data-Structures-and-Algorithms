@@ -87,7 +87,8 @@ static void testDbInsertRecord(void) {
         RecordNew("QF401", "SYD", "MEL", 0,  7,  5,  90),
 
         // this should be inserted
-        RecordNew("VA323", "MEL", "BNE", 6, 11,  0, 110),
+        RecordNew("VA323", "MEL", "BNE", 6, 11,  0, 110), 
+
     };
 
     doTestDbInsertRecord(recs, 6);
