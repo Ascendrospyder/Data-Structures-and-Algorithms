@@ -125,7 +125,7 @@ List DbFindBetweenTimes(FlightDb db,
     {
         l = TreeSearchBetween(db->time, lowerBoundDummy, higherBoundDummy);
     } else {
-        // Record wrap = TreeNext(db->time, lowerBoundDummy); 
+        
         Record endOfDay = RecordNew(MIN_FLIGHT_NUMBER, " ", " ", MAX_DEPARTURE_DAY, MAX_DEPARTURE_HOUR, MAX_DEPARTURE_MINUTE, DURATION_MINUTES);
         Record beginningOfDay = RecordNew(MAXIMUM_FLIGHT_NUMBER, " ", " ", MIN_DEPARTURE_DAY, MIN_DEPARTURE_HOUR, MIN_DEPARTURE_MINUTE, DURATION_MINUTES); 
         
@@ -135,11 +135,10 @@ List DbFindBetweenTimes(FlightDb db,
         // join both the lists 
         ListExtend(l, toBeAdded); 
 
-        // finally free the dummy records 
+        // finally free the dummy records and the new list made 
         ListFree(toBeAdded); 
         RecordFree(endOfDay); 
         RecordFree(beginningOfDay); 
-        
     } 
 
     RecordFree(lowerBoundDummy); 
@@ -162,6 +161,7 @@ List DbFindBetweenTimes(FlightDb db,
  */
 Record DbFindNextFlight(FlightDb db, char *flightNumber, 
                         int day, int hour, int min) {
+
     Record dummy_one = RecordNew(flightNumber, " ", " ", day, hour, min, DURATION_MINUTES);
     Record rec = TreeNext(db->flightNumber, dummy_one);
 
@@ -169,9 +169,10 @@ Record DbFindNextFlight(FlightDb db, char *flightNumber,
 
     if (rec != NULL && strcmp(RecordGetFlightNumber(rec), flightNumber) == 0) // if record is not empty and it matches with the departure airport, we found next airport 
     {
-        return rec; 
+        return rec;  
+
     } else { // if not found we need to wrap to next week, we will utilise a min dummy for this 
-        Record dummy_minimum = RecordNew(MIN_FLIGHT_NUMBER, " ", " ", MIN_DEPARTURE_DAY, MIN_DEPARTURE_HOUR, MIN_DEPARTURE_MINUTE, DURATION_MINUTES); 
+        Record dummy_minimum = RecordNew(flightNumber, " ", " ", MIN_DEPARTURE_DAY, MIN_DEPARTURE_HOUR, MIN_DEPARTURE_MINUTE, DURATION_MINUTES); 
         Record wrap_rec = TreeNext(db->flightNumber, dummy_minimum); 
 
         RecordFree(dummy_minimum); 
@@ -180,7 +181,7 @@ Record DbFindNextFlight(FlightDb db, char *flightNumber,
         {
             return NULL; 
         }
-
+        // printf("I am here!\n");
         return wrap_rec; 
     }
 }
