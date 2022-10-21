@@ -8,23 +8,46 @@ NOTE:
   FbUnfriend
 ===============
 
-- Worst case time complexity: O(...)
+- Worst case time complexity: O(log(n) + n)
 
-- Explanation: ...
+- Explanation: Upon analysis to unfriend someone we need convert their name into
+an Id to find the people of interest and as a result unfriend them. This utilises 
+the nameToId function which has a time complexity of O(log(n)), this being due to 
+it will search through the whole AVL tree to see if the map contains the person 
+of interest. Moreover, to actually check if the person is in the list. This will take 
+O(n) amount of time as we will need to check the whole list to see if the person of interest exists.
+Now we will need to consider the unfriend operation it self which utilises calling adjListRemove 
+which will have a worst case time complexity of O(n) this being as we would need to traverse the whole
+list to find the item we want to remove and as a result remove it. As a result we can take the sum of all 
+these O(log(n) + log(n) + n + n + n) = O(2log(n) + 3n) = O(n) 
+
 
 ===============
 FbMutualFriends
 ===============
 
-- Worst case time complexity: O(...)
+- Worst case time complexity: O(n^2)
 
-- Explanation: ...
+- Explanation: This being due to we need to create a new list, which will take constant time as we are just creating 
+an empty list. Then we find the numPeople is a single operation which will take constant time. Now we will loop for n
+elements which will take quadratic time. Inside the loop we create a pointer current which is assigned to that string 
+which will be constant time however keeping the loop into mind it will take linear time. Then we will need to check if 
+FbisFriend, which will then check if these two people are in the list, as such will need to loop through 
+the whole list in order to find them in worst case, hence taking linear time however due to the effect of the loop it will take 
+quadratic time. At last, if they are friends then they need to be appended into the list, which will take linear time as it will 
+traverse the whole list until it reaches the end where it can then append the given string. Thus, keeping the for loop in mind it will
+take quadratic time. Therefore, it will take O(1 + 1 + n + n * 1 + n * n + n * n + n * n) = O(2 + 2n + 3n^2) = O(n^2)
 
 ===============
  FbFriendRecs1
 ===============
 
-- Worst case time complexity: O(...)
+- Worst case time complexity: O(n^2 * log(n))
 
-- Explanation: ...
+- Explanation: Initially the function makes a call to convert the name to id which takes log(n) time as it calls 
+mapcontains which checks the avl tree to check if the given key actually exists. Then numMutuals and the print statement 
+will take linear time as it performs a single operation. Then we create a loop that will run for n - 2 times and inside this 
+loop is another for loop which runs for n times, however it is influenced by the outer loop thus will run for n(n - 2) times. 
+Then we will make a function call to FbMutualFriends which as discussed above has a time complexity of O(n^2) and list size 
+takes linear time. As such, we have a time complexity of O(n^2 * log(n))
 

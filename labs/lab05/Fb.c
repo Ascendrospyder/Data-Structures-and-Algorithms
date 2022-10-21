@@ -14,13 +14,13 @@
 #define DEFAULT_CAPACITY 1 // DO NOT change this line
 
 typedef struct adjNode *AdjList;
-struct adjNode {
+struct adjNode { 
     int v;
     AdjList next;
 };
 
 // DO NOT modify this struct
-struct fb {
+struct fb { 
     int numPeople;
     int capacity;
 
@@ -192,16 +192,16 @@ bool FbUnfriend(Fb fb, char *name1, char *name2) {
 
 List FbMutualFriends(Fb fb, char *name1, char *name2) {
     // TODO: Complete this function
-    List l = ListNew();
+    List l = ListNew(); // 1
 
-    int numPeople = fb->numPeople; // amount of nodes in graph 
+    int numPeople = fb->numPeople; // amount of nodes in graph | 1
 
-    for (int i = 0; i < numPeople; i++) 
+    for (int i = 0; i < numPeople; i++) // n 
     {
-        char *current = fb->names[i];  // keep track of a current which will loop through the names 
-        if (FbIsFriend(fb, name1, current) && FbIsFriend(fb, name2, current)) // if the urrent is a friend of name1 and name 2, then add to list 
+        char *current = fb->names[i];  // keep track of a current which will loop through the names | n 
+        if (FbIsFriend(fb, name1, current) && FbIsFriend(fb, name2, current)) // if the urrent is a friend of name1 and name 2, then add to list | n * n
         {
-            ListAppend(l, current); 
+            ListAppend(l, current); // n * n 
         }
     }
     return l;
@@ -209,21 +209,21 @@ List FbMutualFriends(Fb fb, char *name1, char *name2) {
 
 void FbFriendRecs1(Fb fb, char *name) {
     // TODO: Complete this function
-    int root = nameToId(fb, name); 
-    int numMutuals = fb->numPeople - 2; 
+    int root = nameToId(fb, name); // 1 
+    int numMutuals = fb->numPeople - 2; // 1
 
-    printf("%s's friend recommendations\n", name);
+    printf("%s's friend recommendations\n", name); // 1
 
-    for (int i = numMutuals; i > 0; i--)
+    for (int i = numMutuals; i > 0; i--) // n - 2 
     {
-        for (int j = 0; j < fb->numPeople; j++)
+        for (int j = 0; j < fb->numPeople; j++) // n(n - 2)
         {
-           if (j == root || FbIsFriend(fb, name, fb->names[j])) {
+           if (j == root || FbIsFriend(fb, name, fb->names[j])) { 
                 continue; 
             }
             
-            List mutuals_list = FbMutualFriends(fb, name, fb->names[j]);
-            int mutualCount = ListSize(mutuals_list);
+            List mutuals_list = FbMutualFriends(fb, name, fb->names[j]); // n ^ 2 
+            int mutualCount = ListSize(mutuals_list); // 1 
             
             if (numMutuals == i) {
                 printf("\t%-20s%4d mutual friends\n", fb->names[j], mutualCount);
