@@ -8,6 +8,22 @@
 int visited[MAX_NODES];  // array to store visiting order
                          // indexed by vertex 0..nV-1
 
+int countReachableR(Graph g, int nV, Vertex v)
+{
+	visited[v] = 1;
+	int total = 1; 
+
+	for (Vertex w = 0; w < nV; w++)
+	{
+		if (GraphAdjacent(g, v, w) && visited[v] == -1)
+        {
+            int count = countReachableR(g, nV, w); 
+            total += count; 
+        }
+	}
+    return total; 
+}
+
 bool dfsPathCheck(Graph g, int nV, Vertex v, Vertex dest) 
 {
 	for (Vertex w = 0; w < nV; w++)
