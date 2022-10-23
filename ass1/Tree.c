@@ -1,4 +1,5 @@
 // Implementation of the Tree ADT
+// The following code was written by z5421641 on 22/10/2022
 
 #include <assert.h>
 #include <stdbool.h>
@@ -16,8 +17,8 @@ struct node {
 	Node right;
 	// IMPORTANT: Do not modify the fields above
 	// You may add additional fields below if necessary
-	int height_left;
-	int height_right;
+	int heightLeft;
+	int heightRight;
 };
 
 struct tree {
@@ -64,7 +65,6 @@ static void doTreeFree(Node n, bool freeRecords) {
 
 ////////////////////////////////////////////////////////////////////////
 // Functions you need to implement
-
 ////////////////////////// function declarations //////////////////////
 static int getHeight(Node n);
 static Node TreeRotateRight(Node n);
@@ -80,7 +80,8 @@ static void doTreeNext(Tree t, Node n, Record rec, Record *next);
 
 /**
  * @brief - This function is used for inserting a record into the tree and 
- * updating it as true or false if it has or hasn't been inserted, respectively. 
+ * updating it as true or false if it has or hasn't been inserted, respectively.
+ * Time Complexity = O(log(n)) 
  * 
  * @param t - Tree 
  * @param rec - Record 
@@ -96,7 +97,8 @@ bool TreeInsert(Tree t, Record rec) {
 
 /**
  * @brief - This function will utilise the doTreeSearch function to check if a
- *  record exists in a tree
+ * record exists in a tree
+ * Time Complexity = O(log(n))
  * 
  * @param t - Tree
  * @param rec - Record 
@@ -109,6 +111,7 @@ Record TreeSearch(Tree t, Record rec) {
 /**
  * @brief - Given a lower and upper bound this function will return a list of 
  * all the records in between.
+ * Time Complexity = O(m + log(n)) where m length of returned list  
  * 
  * @param t - Tree
  * @param lower - Record 
@@ -124,6 +127,7 @@ List TreeSearchBetween(Tree t, Record lower, Record upper) {
 /**
  * @brief - Returns the smallest record that is greater than or equal to the 
  * given record, or NULL if there is no such record.
+ * Time complexity = 	O(log(n))
  * 
  * @param t - Tree 
  * @param rec - Record
@@ -154,8 +158,8 @@ static Node createNewNode(Record rec) {
 	new_node->rec = rec;
 	new_node->left = NULL;
 	new_node->right = NULL;
-	new_node->height_left = 0;
-	new_node->height_right = 0;
+	new_node->heightLeft = 0;
+	new_node->heightRight = 0;
 
 	return new_node;
 }
@@ -171,13 +175,13 @@ static int getHeight(Node n) {
 	if (n == NULL) {
 		return 0;
 	} else {
-		n->height_left = 1 + getHeight(n->left);
-		n->height_right = 1 + getHeight(n->right);
+		n->heightLeft = 1 + getHeight(n->left);
+		n->heightRight = 1 + getHeight(n->right);
 
-		if (n->height_left > n->height_right) {
-			return n->height_left;
+		if (n->heightLeft > n->heightRight) {
+			return n->heightLeft;
 		} else {
-			return n->height_right;
+			return n->heightRight;
 		}
 	}
 }
@@ -356,10 +360,11 @@ static void doTreeNext(Tree t, Node n, Record rec, Record *next) {
 		return doTreeNext(t, n->left, rec, next);
 	}
 }
-////////////////////////////////// testing //////////////////////////////////////////////////////
+////////////////////////////////// testing ////////////////////////////////////
 
 // /**
-//  * @brief - The following function is the helper function for printTree for further debugging.
+//  * @brief - The following function is the helper function for printTree for 
+// further debugging.
 //  *
 //  * @param n - Node n
 //  */
@@ -368,15 +373,17 @@ static void doTreeNext(Tree t, Node n, Record rec, Record *next) {
 //     if (n == NULL) return;
 
 //     // preorder print
-//     printf("%s| %s | %s |%d %d00 | %d\n", RecordGetFlightNumber(n->rec), RecordGetDepartureAirport(n->rec),
-//                                             RecordGetArrivalAirport(n->rec),  RecordGetDepartureDay(n->rec),
-//                                             RecordGetDepartureHour(n->rec), RecordGetDurationMinutes(n->rec));
+//     printf("%s| %s | %s |%d %d00 | %d\n", RecordGetFlightNumber(n->rec), 
+// RecordGetDepartureAirport(n->rec), RecordGetArrivalAirport(n->rec),  
+// RecordGetDepartureDay(n->rec), RecordGetDepartureHour(n->rec), 
+// RecordGetDurationMinutes(n->rec));
 //     doPrintTree(n->left);
 //     doPrintTree(n->right);
 // }
 
 // /**
-//  * @brief - The following function basically prints the tree out for debugging to check if insertion
+//  * @brief - The following function basically prints the tree out for 
+// debugging to check if insertion
 //  * is correct.
 //  *
 //  * @param t - Tree t
