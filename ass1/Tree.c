@@ -1,5 +1,7 @@
 // Implementation of the Tree ADT
-// The following code was written by z5421641 on 22/10/2022
+// The following code was written by Arindam Mukherjee (z5421641) on 22/10/2022
+// Description: The following program utilises the logic of an AVL tree to 
+// model a flight database system that can perform a range of tasks.
 
 #include <assert.h>
 #include <stdbool.h>
@@ -321,8 +323,7 @@ static void doTreeSearchBetween(Tree t, Node n, Record lower, Record upper,
 	int compare_lower = t->compare(lower, n->rec);
 	int compare_higher = t->compare(upper, n->rec);
 
-	// to have an inorder traversal, left -> root -> right
-
+	// inorder traversal, left -> root -> right
 	// if the record is higher than the lower bound, traverse left section
 	if (compare_lower < 0) {
 		doTreeSearchBetween(t, n->left, lower, upper, l);
@@ -348,8 +349,7 @@ static void doTreeSearchBetween(Tree t, Node n, Record lower, Record upper,
  * @param next - Record *next 
  */
 static void doTreeNext(Tree t, Node n, Record rec, Record *next) {
-	if (n == NULL)
-		return;
+	if (n == NULL) return;
 
 	int compare = t->compare(rec, n->rec);
 
@@ -360,36 +360,3 @@ static void doTreeNext(Tree t, Node n, Record rec, Record *next) {
 		return doTreeNext(t, n->left, rec, next);
 	}
 }
-////////////////////////////////// testing ////////////////////////////////////
-
-// /**
-//  * @brief - The following function is the helper function for printTree for 
-// further debugging.
-//  *
-//  * @param n - Node n
-//  */
-// static void doPrintTree(Node n)
-// {
-//     if (n == NULL) return;
-
-//     // preorder print
-//     printf("%s| %s | %s |%d %d00 | %d\n", RecordGetFlightNumber(n->rec), 
-// RecordGetDepartureAirport(n->rec), RecordGetArrivalAirport(n->rec),  
-// RecordGetDepartureDay(n->rec), RecordGetDepartureHour(n->rec), 
-// RecordGetDurationMinutes(n->rec));
-//     doPrintTree(n->left);
-//     doPrintTree(n->right);
-// }
-
-// /**
-//  * @brief - The following function basically prints the tree out for 
-// debugging to check if insertion
-//  * is correct.
-//  *
-//  * @param t - Tree t
-//  */
-// static void printTree(Tree t)
-// {
-//     doPrintTree(t->root);
-//     printf("\n");
-// }

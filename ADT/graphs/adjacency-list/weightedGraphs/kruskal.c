@@ -20,12 +20,12 @@ bool visited[MAX_NODES];
  */
 bool dfsCycleCheck(Graph g, int nV, Vertex v, Vertex u) 
 {
-    visited[v] = true; // 
-    for (Vertex w = 0; w < nV; w++) 
+    visited[v] = true; // set the vth position as true but you need to prove it to me
+    for (Vertex w = 0; w < nV; w++) // set up a new vertex which will check the whole graph 
     {
-        if (adjacent(g, v, w)) 
+        if (adjacent(g, v, w)) // if the vertex is adjacent to that then go ahead 
         {
-           if (!visited[w])
+           if (!visited[w]) // if edge not visited then run again and check for next cycle
            {
                 return dfsCycleCheck(g, nV, w, v);
            } else if (w != u) {
@@ -52,12 +52,13 @@ Graph kruskal(Graph g, Edge sortedEdges[], int nV, int nE)
 {
     Graph mst = newGraph(nV); // create an empty graph for our mst 
 
-    int n = 0; 
-    for (int i = 0; i < nE && n < nV - 1; i++)
+    int numEdges = 0; 
+    for (int i = 0; i < nE && numEdges < nV - 1; i++)
     {
+        // this section will insert the edge into the graph 
         Edge e = sortedEdges[i]; // assume edges are already sorted? 
         insertEdge(mst, e); 
-        n++; 
+        numEdges++; 
 
         // initialise everything in the visited array as false 
         for (Vertex v = 0; v < nV; v++) 
@@ -69,7 +70,7 @@ Graph kruskal(Graph g, Edge sortedEdges[], int nV, int nE)
         if (dfsCycleCheck(mst, nV, e.v, e.v))
         {
             removeEdge(mst, e); 
-            n--; 
+            numEdges--; 
         }
     }
     return mst; // return the mst at the end  
