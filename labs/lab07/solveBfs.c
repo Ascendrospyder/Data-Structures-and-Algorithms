@@ -23,6 +23,7 @@ bool checkIfValid(Maze m, Cell w)
     }
 }
 
+
 bool checkAdjacent(Maze m, Cell w, Cell v)
 {
     Cell up = {w.row + 1, w.col}; 
@@ -69,6 +70,13 @@ bool checkAdjacent(Maze m, Cell w, Cell v)
     return false; 
 }
 
+void freeMaze(Cell **predMatrix, bool **boolMatrix, Queue q)
+{
+    freeBoolMatrix(boolMatrix); 
+    freeCellMatrix(predMatrix); 
+    QueueFree(q); 
+}
+
 /**
  * @brief - which takes in a maze and tries to find a path from start to finish 
  * using the breadth-first search algorithm. If there is a path, the function 
@@ -81,20 +89,22 @@ bool checkAdjacent(Maze m, Cell w, Cell v)
  */
 bool solve(Maze m) {
     // TODO: Complete this function 
-    bool **visited = createBoolMatrix(MazeHeight(m), MazeHeight(m)); 
-    Cell ** predMatrix = createCellMatrix(MazeHeight(m), MazeHeight(m));
+    bool **visited = createBoolMatrix(MazeHeight(m), MazeWidth(m)); 
+    Cell ** predMatrix = createCellMatrix(MazeHeight(m), MazeWidth(m));
     Cell start = MazeGetStart(m); 
     bool foundPath = false;
+    Cell v; 
+
 
     // set the start as visited 
-    visited[start.row][start.col] = true; 
+    visited[start.row][start.col] = 1; 
 
     Queue q = QueueNew(); 
     QueueEnqueue(q, start);
 
     while (!QueueIsEmpty(q))
     {
-        Cell v = QueueDequeue(q);
+        v = QueueDequeue(q);
         if (MazeVisit(m, v) == true)
         {
             while (v.row != start.row || v.col != start.col)
@@ -103,34 +113,28 @@ bool solve(Maze m) {
                 v = predMatrix[v.row][v.col]; 
             }
             MazeMarkPath(m, start); 
-            MazeMarkPath(m, v); 
-            foundPath = true; 
+            MazeMarkPath(m, v);  
+            freeMaze(predMatrix, visited, q); 
+            foundPath = true;
             return foundPath; 
         } else {
-            int row = 0; 
-            while (row < MazeHeight(m))
+            for (int row = 0; row < MazeHeight(m); row++)
             {
-                int col = 0; 
-                while (col < MazeWidth(m))
+                for (int col = 0; col < MazeWidth(m); col++)
                 {
                     Cell w = {.row = row, .col = col}; 
                     if (visited[w.row][w.col] == false && checkAdjacent(m, v, w)) 
                     {
                         predMatrix[w.row][w.col] = v; 
                         MazeVisit(m, w);
-                        visited[w.row][w.col] = true; 
+                        visited[w.row][w.col] = 1; 
                         QueueEnqueue(q, w); 
                     }
-                    col++; 
                 }
-                row++; 
             }
-        }
-
+        }   
     } 
-    freeBoolMatrix(visited); 
-    freeCellMatrix(predMatrix); 
-    QueueFree(q); 
+    freeMaze(predMatrix, visited, q); 
     return foundPath;
 }
 
