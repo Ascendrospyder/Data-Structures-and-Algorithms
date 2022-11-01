@@ -7,15 +7,19 @@ NOTE:
   solveBfs
 ============
 
-- Worst case time complexity: O(...)
+- Worst case time complexity: O(V + E) where V = vertices and E = Edges 
 
-- Explanation: ...
+- Explanation: Since we have to initialise the bool and pred matrices it takes V time. 
+  Moreover, the program will go through all of the Edges of the maze until the queue 
+  is empty, hence resulting in E time. As such it will have O(V + E)  time complexity. 
 
 ============
   solveDfs
 ============
 
-- Worst case time complexity: O(...)
+- Worst case time complexity: O(V + E)
 
-- Explanation: ...
-
+- Explanation: Since we have to initialise the bool and pred matrices it takes V time. 
+  Moreover, the program will go through all of the Edges of the maze as a result of the 
+  for loop and will do so for E - 1 times, hence resulting in E time. As such
+  it will have O(V + E)  time complexity. 

@@ -12,6 +12,7 @@
 + Kassandra 
 + Eivor 
 f Altair Ezio 
+f Altair Connor 
 f Eivor Kassandra 
 f Haythem Edward 
 f Bayek Aya 
@@ -20,3 +21,4 @@ f Evie Altair
 f Edward Ezio 
 l
 m Altair Edward 
+r Altair 

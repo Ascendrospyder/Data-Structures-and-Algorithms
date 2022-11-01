@@ -1,4 +1,6 @@
 // BFS maze solver
+// written by Arindam Mukherjee z5421641 
+// date: 29/10/2022
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -97,7 +99,7 @@ bool solve(Maze m) {
 
 
     // set the start as visited 
-    visited[start.row][start.col] = 1; 
+    visited[start.row][start.col] = true; 
 
     Queue q = QueueNew(); 
     QueueEnqueue(q, start);
@@ -115,7 +117,7 @@ bool solve(Maze m) {
             MazeMarkPath(m, start); 
             MazeMarkPath(m, v);  
             freeMaze(predMatrix, visited, q); 
-            foundPath = true;
+            foundPath = true; 
             return foundPath; 
         } else {
             for (int row = 0; row < MazeHeight(m); row++)
@@ -127,14 +129,14 @@ bool solve(Maze m) {
                     {
                         predMatrix[w.row][w.col] = v; 
                         MazeVisit(m, w);
-                        visited[w.row][w.col] = 1; 
+                        visited[w.row][w.col] = true; 
                         QueueEnqueue(q, w); 
                     }
                 }
             }
         }   
     } 
-    freeMaze(predMatrix, visited, q); 
+    freeMaze(predMatrix, visited, q); // free the maze after 
     return foundPath;
 }
 
