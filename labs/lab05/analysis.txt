@@ -8,7 +8,7 @@ NOTE:
   FbUnfriend
 ===============
 
-- Worst case time complexity: O(log(n) + n)
+- Worst case time complexity: O(n)
 
 - Explanation: Upon analysis to unfriend someone we need convert their name into
 an Id to find the people of interest and as a result unfriend them. This utilises 

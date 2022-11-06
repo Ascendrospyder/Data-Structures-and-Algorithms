@@ -1,18 +1,28 @@
+// Weighted Graph ADT interface ... COMP2521 
+#ifndef GRAPH_H
+#define GRAPH_H
+
+#include <stdio.h>
 #include <stdbool.h>
 
-typedef struct GraphRep *Graph; // we are typedefing the struct similar to BST one
+typedef struct GraphRep *Graph;
 
-typedef int Vertex; 
+// vertices are ints
+typedef int Vertex;
 
-
+// edges are pairs of vertices (end-points)
 typedef struct Edge {
-  Vertex v; 
-  Vertex w; 
-} Edge; 
+   Vertex v;
+   Vertex w;
+   int weight; // TODO new change here 
+} Edge;
 
-Graph GraphNew(int); 
-void GraphEdgeInsert(Graph, Edge); 
-void GraphEdgeRemove(Graph, Edge); 
-bool GraphAdjacent(Graph, Vertex, Vertex); 
-void GraphShow(Graph); 
-void GraphDestroy(Graph); 
+Graph newGraph(int);
+void insertEdge(Graph, Vertex, Vertex, int); 
+void removeEdge(Graph, Vertex, Vertex);
+int  adjacent(Graph, Vertex, Vertex);  // returns weight, or 0 if not adjacent
+void  showGraph(Graph);
+void  freeGraph(Graph);
+bool GraphCheckAdjacent(Graph, Vertex, Vertex); 
+
+#endif

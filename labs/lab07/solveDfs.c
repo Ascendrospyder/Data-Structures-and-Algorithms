@@ -118,7 +118,7 @@ bool findPathDfs(Maze m, Cell **predMatrix, bool **boolMatrix, Cell v)
 
 bool solve(Maze m) {
     bool **visited = createBoolMatrix(MazeHeight(m), MazeWidth(m)); 
-    Cell ** predMatrix = createCellMatrix(MazeHeight(m), MazeWidth(m));
+    Cell **predMatrix = createCellMatrix(MazeHeight(m), MazeWidth(m));
     Cell start = MazeGetStart(m); 
     bool foundPath = false;
     foundPath = findPathDfs(m, predMatrix, visited, start); 

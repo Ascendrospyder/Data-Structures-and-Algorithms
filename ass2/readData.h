@@ -4,5 +4,10 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include "graph.h"
+
 Graph GetGraph(); 
-char **GetCollection(); 
+// char **GetCollection(); 
+int checkNumberUrls(); 
+bool checkIsLink(char *, char **); 
+int checkLinkPosition(int, char *, char **); 

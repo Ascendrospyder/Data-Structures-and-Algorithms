@@ -1,0 +1,21 @@
+Question 2
+
+visited[1000]; 
+
+typedef struct graph {
+    int nV; 
+    int **edges; 
+}
+
+
+Set setReachableR(Graph g, Vertex src)
+{
+    visited[src] = 1; 
+    Set s; 
+    set_add(s, src); 
+
+    for (int i = 0; i < g.nV; i++)
+    {
+        if (edges[src][i] 
+    }
+}

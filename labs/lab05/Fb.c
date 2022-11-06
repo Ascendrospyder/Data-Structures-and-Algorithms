@@ -225,7 +225,7 @@ void FbFriendRecs1(Fb fb, char *name) {
             List mutuals_list = FbMutualFriends(fb, name, fb->names[j]); // n ^ 2 
             int mutualCount = ListSize(mutuals_list); // 1 
             
-            if (numMutuals == i) {
+            if (numMutuals == i) { 
                 printf("\t%-20s%4d mutual friends\n", fb->names[j], mutualCount);
             }
         }
