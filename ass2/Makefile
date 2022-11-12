@@ -39,20 +39,21 @@ all: pageRank searchPageRank scaledFootrule
 
 pageRank: pageRank.c $(SUPPORTING_FILES)
 	$(CC) $(CFLAGS1) -o pageRank pageRank.c $(SUPPORTING_FILES) -lm
-	find . -maxdepth 2 -path './part1/*' -exec cp pageRank {} \;
+	find . -maxdepth 2 -type d -path './part1/*' -exec cp pageRank {} \;
 	rm pageRank
 
 searchPageRank: searchPageRank.c $(SUPPORTING_FILES)
 	$(CC) $(CFLAGS1) -o searchPageRank searchPageRank.c $(SUPPORTING_FILES) -lm
-	find . -maxdepth 2 -path './part2/*' -exec cp searchPageRank {} \;
+	find . -maxdepth 2 -type d -path './part2/*' -exec cp searchPageRank {} \;
 	rm searchPageRank
 
 scaledFootrule: scaledFootrule.c $(SUPPORTING_FILES)
 	$(CC) $(CFLAGS1) -o scaledFootrule scaledFootrule.c $(SUPPORTING_FILES) -lm
-	find . -maxdepth 2 -path './part3/*' -exec cp scaledFootrule {} \;
+	find . -maxdepth 2 -type d -path './part3/*' -exec cp scaledFootrule {} \;
 	rm scaledFootrule
 
 .PHONY: clean
 clean:
 	rm -f pageRank searchPageRank scaledFootrule
 	rm -f part1/*/pageRank part2/*/searchPageRank part3/*/scaledFootrule
+

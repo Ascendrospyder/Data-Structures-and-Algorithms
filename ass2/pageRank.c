@@ -61,6 +61,7 @@ int main(int argc, char *argv[])
 
     // the following code will build the graph
     Graph urlGraph = GetGraph(); 
+    // showGraph(urlGraph); 
     
     int numUrls = checkNumberUrls(); 
     double numUrlsFloat = (double)numUrls; 
@@ -78,6 +79,12 @@ int main(int argc, char *argv[])
     double diff = diffPR; 
     while (iteration < maxIterations && diff >= diffPR)
     {
+
+        for (int j = 0; j < numUrls; j++)
+        {
+            previousPageRank[j] = pageRank[j]; 
+        }
+        
         for (int i = 0; i < numUrls; i++) // too nested need to fix later 
         {
             double previousWeightedPageRank = 0; 
@@ -95,11 +102,6 @@ int main(int argc, char *argv[])
         for (int i = 0; i < numUrls; i++)
         {
             diff = diff + fabs(pageRank[i] - previousPageRank[i]); 
-        }
-
-        for (int j = 0; j < numUrls; j++)
-        {
-            previousPageRank[j] = pageRank[j]; 
         }
         
         iteration++;

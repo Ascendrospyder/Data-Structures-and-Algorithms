@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-
-
 #include "readData.h"
 #include "graph.h"
 
@@ -97,6 +95,7 @@ Graph GetGraph()
         
         fclose(fileOfInterest); 
     }
+    free(fileName); 
     return urlGraph; 
 }
 

@@ -7,6 +7,9 @@
 
 typedef struct Node {
     int data; 
+    int size; 
+    int firstNode; 
+    int lastNode; 
     struct Node *next; 
 }Node;
 /**
@@ -21,6 +24,9 @@ Node *makeNode (int n)
     assert(new != NULL); // show an error if the condition is false 
 
     new->data = n; // populate the struct 
+    new->size = 0; 
+    new->first = NULL; 
+    new->last = NULL; 
     new->next = NULL; 
     return new; // return the new node 
 }
