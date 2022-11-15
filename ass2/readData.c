@@ -91,11 +91,11 @@ Graph GetGraph()
                 int pos = checkLinkPosition(numLinks, tempStringTwo, urlList);
                 insertEdge(urlGraph, i, pos, 1);  
             }
-        }
-        
+        } 
         fclose(fileOfInterest); 
+        free(fileName); 
     }
-    free(fileName); 
+    // free(urlList); 
     return urlGraph; 
 }
 

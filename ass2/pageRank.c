@@ -65,21 +65,23 @@ int main(int argc, char *argv[])
     
     int numUrls = checkNumberUrls(); 
     double numUrlsFloat = (double)numUrls; 
+    printf("num urls = %f\n", numUrlsFloat); 
     double pageRank[numUrls]; 
     double previousPageRank[numUrls]; 
+    double sumOfDiff = 0.0; 
 
     // the following code will set pagerank to 1/n
     for (int i = 0; i < numUrls; i++)
     {
-        pageRank[i] = (1 / numUrlsFloat); 
-        previousPageRank[i] = (1 / numUrlsFloat); 
+        pageRank[i] = (1.0 / numUrlsFloat);  
+        previousPageRank[i] = (1.0 / numUrlsFloat); 
     }
 
     int iteration = 0; 
     double diff = diffPR; 
     while (iteration < maxIterations && diff >= diffPR)
     {
-
+        sumOfDiff = 0.0; 
         for (int j = 0; j < numUrls; j++)
         {
             previousPageRank[j] = pageRank[j]; 
@@ -87,7 +89,7 @@ int main(int argc, char *argv[])
         
         for (int i = 0; i < numUrls; i++) // too nested need to fix later 
         {
-            double previousWeightedPageRank = 0; 
+            double previousWeightedPageRank = 0.0; 
             for (int j = 0; j < numUrls; j++)
             {
                 if (i != j && GraphCheckAdjacent(urlGraph, j, i))
@@ -95,14 +97,16 @@ int main(int argc, char *argv[])
                     previousWeightedPageRank = previousWeightedPageRank + (previousPageRank[j] * findWeightedInlinks(urlGraph, j, i) * findWeightedOutlinks(urlGraph, j, i));
                 }
             }
-            pageRank[i] = ((1 - d) / (numUrlsFloat)) + (d * previousWeightedPageRank);    
+            pageRank[i] = ((1.0 - d) / (numUrlsFloat)) + (d * previousWeightedPageRank);    
         }
         
-
-        for (int i = 0; i < numUrls; i++)
+        int k = 0; 
+        while (k < numUrls)
         {
-            diff = diff + fabs(pageRank[i] - previousPageRank[i]); 
+            sumOfDiff = sumOfDiff + fabs(pageRank[k] - previousPageRank[k]); 
+            k++; 
         }
+        diff = sumOfDiff; 
         
         iteration++;
     } 
@@ -114,6 +118,7 @@ int main(int argc, char *argv[])
     } 
 
     sortDescendingPrint(pageRank, outDegree, numUrls, urlList); 
+    free(urlGraph); 
     return 0; 
 }
 
