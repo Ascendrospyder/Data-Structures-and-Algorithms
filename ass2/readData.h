@@ -7,7 +7,8 @@
 #include "graph.h"
 
 Graph GetGraph(); 
-// char **GetCollection(); 
+void GetCollection(FILE *, char *, char **);
 int checkNumberUrls(); 
 bool checkIsLink(char *, char **); 
 int checkLinkPosition(int, char *, char **); 
+void freeUrlsArray(char **, int); 

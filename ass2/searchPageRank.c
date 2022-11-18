@@ -15,12 +15,6 @@
 
 #define MAX 1000 
 
-// struct urlsInformation {
-//     int numMatchingTerms; 
-// }; 
-
-
-
 ///////////////////////////////////// delete later /////////////////////////////////////////////////////
 void printPageRanks(double *pageRanks, char **urls, int numUrls); 
 ///////////////////////////////////// delete later /////////////////////////////////////////////////////
@@ -34,14 +28,12 @@ void freeUrls(char **urls, int len)
     free(urls); 
 }
 
+
 bool checkFileInUrls(char **urls, char *buffer, int length)
 {
     for (int i = 0; i < length; i++)
     {
-        if (strcmp(buffer, urls[i]) == 0)
-        {
-            return true; 
-        }
+        if (strcmp(buffer, urls[i]) == 0) return true;
     }
     return false;
 }
@@ -51,8 +43,12 @@ void populatePageRankArray(FILE *pagerankFile, double *pageRanks, char **urls, c
     // if the urls are the same go an appened it to our pageRankArray
     if (strcmp(urls[i], tempUrlBuffer) == 0)
     {
+        // load the file contents into tempUrlBuffer and load every instance of a 
+        // newline into the newLineBuffer 
         while (fscanf(pagerankFile, "%s%[ \n]", tempUrlBuffer, newLineBuffer) != EOF)
         {
+            // at the first instance of a newline, go ahead and add the string
+            // to the pageRank array and break out of the loop 
             if (strchr(newLineBuffer, '\n'))
             {
                 pageRanks[i] = atof(tempUrlBuffer); 
@@ -63,39 +59,77 @@ void populatePageRankArray(FILE *pagerankFile, double *pageRanks, char **urls, c
     }
 }
 
-void sortPageRank(double *pageRank, int *numMatching, char **urls, double tempPR, int temp, char *tempUrls, int len, int i)
+void swapElementsInArray(char *tempUrls, char **urls, int temp, int *countUrls, double tempPR, double *pageRank, int i, int j)
 {
-    for (int j = 0; j < len - i - 1; j++)
-    {   
-        if (numMatching[j] < numMatching[j + 1])
-        {
-            // swap pageRank --> urls 
-            temp = numMatching[j]; 
-            numMatching[j] = numMatching[j + 1]; 
-            numMatching[j + 1] = temp; 
+    tempUrls = urls[i]; 
+    urls[i] = urls[j]; 
+    urls[j] = tempUrls;
+                
+    temp = countUrls[i]; 
+    countUrls[i] = countUrls[j]; 
+    countUrls[j] = temp;
 
-            tempPR = pageRank[j]; 
-            pageRank[j] = pageRank[j + 1]; 
-            pageRank[j + 1] = tempPR; 
 
-            tempUrls = urls[j]; 
-            urls[j] = urls[j + 1]; 
-            urls[j + 1] = tempUrls; 
-        }
-    } 
+    tempPR = pageRank[i]; 
+    pageRank[i] = pageRank[j]; 
+    pageRank[j] = tempPR;
 }
 
-double *findPageRanks(char **urls, int len)
+void sortPageRank(double *pageRank, int *countUrls, char **urls, double tempPR, int temp, char *tempUrls, int numUrls)
 {
-    double *pageRanks = malloc(sizeof(double) * len); 
+    // tested and works 
+    for (int i = 0; i < numUrls; i++)
+    {
+        for (int j = i + 1; j < numUrls; j++)
+        { 
+            if (countUrls[i] < countUrls[j])
+            {
+                printf("FIRST LOOP: url[i] = %s\turl[j] = %s\tcountUrl[i] = %d\tcountUrl[j] = %d\tpageRank[i] = %.7f\tpageRank[j] = %.7f\n", urls[i], urls[j], countUrls[i], countUrls[j], pageRank[i], pageRank[j]);
+                swapElementsInArray(tempUrls, urls, temp, countUrls, tempPR, pageRank, i, j); // potential bug 
+            }
+        }
+    }
+
+    //tested and works 
+    for (int i = 0; i < numUrls; i++)
+    {
+        for (int j = i + 1; j < numUrls; j++)
+        { 
+            
+            if (countUrls[i] == countUrls[j] && pageRank[i] < pageRank[j])
+            {
+                swapElementsInArray(tempUrls, urls, temp, countUrls, tempPR, pageRank, i, j); 
+            }
+        }
+    }
+
+    for (int i = 0; i < numUrls; i++)
+    {
+        for (int j = i + 1; j < numUrls; j++)
+        {
+            if (countUrls[i] == countUrls[j] && pageRank[i] == pageRank[j])
+            {
+                if (strcmp(urls[i], urls[j]) > 0)
+                {
+                    swapElementsInArray(tempUrls, urls, temp, countUrls, tempPR, pageRank, i, j); 
+                }
+            }
+        }
+    }
+}
+
+
+double *findPageRanks(char **urls, int length)
+{
+    double *pageRanks = malloc(sizeof(double) * length); 
     char tempUrlBuffer[MAX]; 
     char newlineBuffer[MAX]; 
     FILE *pagerankFile = fopen("pageRankList.txt", "r"); 
  
     int j = 0; 
-    while (fscanf(pagerankFile, "%s", tempUrlBuffer) != EOF && j < len)
+    while (fscanf(pagerankFile, "%s", tempUrlBuffer) != EOF && j < length)
     {
-        for (int i = 0; i < len; i++)
+        for (int i = 0; i < length; i++)
         {   
             populatePageRankArray(pagerankFile, pageRanks, urls, tempUrlBuffer, newlineBuffer, j, i); 
         }
@@ -118,60 +152,67 @@ int main(int argc, char *argv[])
 
     char **words = NULL; 
     char **urls = NULL; 
+    int *countUrls = NULL; 
     char tempWordBuffer[MAX];  
     char newLineBuffer[MAX];  
     int numWords = 0; 
     int numUrls = 0; 
-    int numNewLines = 0; 
-    int j = 0; 
     FILE *wordFile = fopen("invertedIndex.txt", "r");
 
-    // fixed a bug where it was printing the ./ command 
-    // the following code 
+
     for (int i = 1; i < argc; i++)
     {
         words = realloc(words, (numWords + 1) * sizeof(char *)); 
         words[numWords] = malloc(strlen(argv[i]) + 1); 
         strcpy(words[numWords++], argv[i]); 
-        printf("num words = %d\n", numWords); 
+        // printf("num words = %d\n", numWords); 
     }
 
-    for (int i = 0; i < numWords; i++)
-    {
-        printf("words scanned in from command line: %s\n", words[i]);
-    }
-     
+    // for (int i = 0; i < numWords; i++)
+    // {
+    //     printf("words scanned in from command line: %s\n", words[i]);
+    // }
 
-    while (fscanf(wordFile, "%s", tempWordBuffer) != EOF && j < numWords)
+
+    while (fscanf(wordFile, "%s", tempWordBuffer) != EOF)
     {
         for (int k = 0; k < numWords; k++)
         {
             if (strcmp(words[k], tempWordBuffer) == 0)
-            {
+            {   
+                 
                 while (fscanf(wordFile, "%s%[ \n]", tempWordBuffer, newLineBuffer) != EOF)
-                {
-                    // printf("temp word buffer: %c\n", tempWordBuffer[j]);
-                    // printf("tempword buffer: %s\n", tempWordBuffer); 
-                    if (!checkFileInUrls(urls, tempWordBuffer, numUrls))
+                { 
+                    int index = 0; 
+                    for (index = 0; index < numUrls; index++)
                     {
-                        urls = realloc(urls, (numUrls + 1) * sizeof(char *)); 
-                        urls[numUrls] = malloc(strlen(tempWordBuffer) + 1); 
-                        strcpy(urls[numUrls++], tempWordBuffer);   
-                        if (strchr(newLineBuffer, '\n'))
+                        if (strcmp(urls[index], tempWordBuffer) == 0)
                         {
+                            countUrls[index] = countUrls[index] + 1; 
                             break; 
                         }
                     }
-                    j++; 
+
+                    if (index == numUrls)
+                    {
+                        urls = realloc(urls, (numUrls + 1) * sizeof(char *));
+                        countUrls = realloc(countUrls, (numUrls + 1) * sizeof(int));  
+                        urls[index] = malloc(strlen(tempWordBuffer) + 1); 
+                        
+                        strcpy(urls[numUrls], tempWordBuffer); 
+                        countUrls[index] = 1;   
+                        numUrls++; 
+                    }
+
+                    if (strchr(newLineBuffer, '\n'))
+                    {
+                        break; 
+                    }
                 }
             }
             
         }
     }
-
-    // printf("%d\n", numMatching); 
-     
-    printf("new lines: %d\n", numNewLines); 
     fclose(wordFile); 
 
     double tempPR = 0.0; 
@@ -179,74 +220,27 @@ int main(int argc, char *argv[])
     int temp = 0; 
     double *pagerankOfInterest = findPageRanks(urls, numUrls);
 
-    // the following code will get the numMatching terms for each url 
-    int numMatching[MAX]; 
-    int *holdMatching = malloc(sizeof(int) * numUrls); 
-    int count; 
-    int counter = 0; 
+    // for (int i = 0; i < numUrls; i++)
+    // {
+    //     printf("urls = %s\tnumMatching = %d\n", urls[i], countUrls[i]); 
+    // }
 
-    for (int i = 0; i < numUrls; i++)
-    {
-        numMatching[i] = -1; 
-    }
-
-    for (int i = 0; i < numUrls; i++)
-    {
-        count = 1; 
-        for (int j = i + 1; j < numUrls; j++)
-        {
-            if (strcmp(urls[i], urls[j]) == 0)
-            {
-                printf("I am here!\n"); 
-                count++; 
-                numMatching[j] = 0; 
-            }
-        }
-
-        if (numMatching[i] != 0)
-        {
-            numMatching[i] = count; 
-        }
-    }
-
-    for (int i = 0; i < numUrls; i++)
-    {
-        if (numMatching[i] != 0)
-        {
-            holdMatching[counter++] = numMatching[i]; 
-        }
-    }
-
-
-    for (int i = 0; i < numUrls; i++)
-    {
-        printf("urls = %s\tnumMatching = %d\n", urls[i], numMatching[i]); 
-    }
-
-
-    // int numMatchingTerms = findNumMatchingTerms(urls, words, numUrls, numWords);
-    // printf("num Macthing terms: %d\n", numMatchingTerms);  
-    // int *numMatchingTerms[numUrls]; 
-    // for (int i = 0; i < )
-
-    for (int i = 0; i < numUrls; i++)
-    {   
-        sortPageRank(pagerankOfInterest, holdMatching, urls, tempPR, temp, tempUrls, numUrls, i); 
-    }
-    printPageRanks(pagerankOfInterest, urls, numUrls); 
+    sortPageRank(pagerankOfInterest, countUrls, urls, tempPR, temp, tempUrls, numUrls); 
     
-
-    if (numUrls < 30)
-    {
+    // printPageRanks(pagerankOfInterest, urls, numUrls); 
+    
+    // if (numUrls < 30)
+    // {
         for (int j = 0; j < numUrls && j < 30; j++)
         {
             printf("%s\n", urls[j]); 
         }
-    }
+    // }
 
     free(pagerankOfInterest);
     freeUrls(urls, numUrls); 
     freeUrls(words, numWords); 
+    free(countUrls); 
 }
 
 //////////////////////////////// debugging function //////////////////////////////

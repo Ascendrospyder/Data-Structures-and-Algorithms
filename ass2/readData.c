@@ -9,18 +9,36 @@
 
 #define MAX 1000 
 
+// submission command : give cs2521 ass2 pageRank.c searchPageRank.c scaledFootrule.c graph.c graph.h readData.c readData.h
+
+/**
+ * @brief - This function acts as a helper function, to return the 
+ * number of url links there are in collection.txt 
+ * 
+ * @return -int, number of urlLinks present
+**/ 
 int checkNumberUrls()
 {
     char tempString[MAX]; 
-    FILE *fp = fopen("collection.txt", "r"); 
+    FILE *collectionFile = fopen("collection.txt", "r"); 
     int numUrls = 0; 
-    while (fscanf(fp, "%s", tempString) != EOF)
+    while (fscanf(collectionFile, "%s", tempString) != EOF)
     {
         numUrls++; 
     } 
     return numUrls; 
 }
 
+/**
+ * @brief - The following function acts as a helper function, to check if
+ * there exists a link between a given temporary file string and file array 
+ * 
+ * @param fileString - Is a temporary file string 
+ * @param fileArray - Is a temporary file Array 
+ * @return true - if there exists a link 
+ * @return false - if there isn't a link 
+ * 
+**/
 bool checkIsLink(char *fileString, char **fileArray)
 {
     for (int i = 0; i < checkNumberUrls(); i++)
@@ -30,6 +48,16 @@ bool checkIsLink(char *fileString, char **fileArray)
     return false; 
 }
 
+/**
+ * @brief - The following finds where the string is located in the 
+ * given array, utilising the strcmp function 
+ * 
+ * @param numLinks - The number of links that exists 
+ * @param fileString - The string being passed on to verify the position
+ * @param fileArray - The array being passed to verify where the string
+ * is located 
+ * @return int - the position in the file array that the string exists in 
+**/
 int checkLinkPosition(int numLinks, char *fileString, char **fileArray)
 {
     int position = 0; 
@@ -41,86 +69,111 @@ int checkLinkPosition(int numLinks, char *fileString, char **fileArray)
     return position; 
 }
 
-Graph GetGraph()
+/**
+ * @brief - The following function will free the url Array. 
+ * 
+ * @param urlList - The array which holds all the urls to be freed
+ * @param len - length of the array 
+**/ 
+void freeUrlsArray(char **urlList, int len)
 {
-    // Following code will open the collection 
-    FILE *fp = fopen("collection.txt", "r"); 
-    char *urlList[MAX]; 
-    char tempStringOne[MAX]; 
-    int numLinks = 0;   
+    for (int i = 0; i < len; i++)
+    {
+        free(urlList[i]); 
+    }
+}
 
-    // the following code will read through collection and place the Urls's
-    // into the new urlList array 
-    for (int i = 0; fscanf(fp, "%s", tempStringOne) != EOF; i++)
+/**
+ * @brief - The following function will go through the urlList and
+ * concatenate the string with .txt which will be used to open the url 
+ * file. 
+ * 
+ * @param urlList - An array holding all the urls
+ * @param i - the particular index in the loop 
+ * 
+ * @returns - the new file name
+**/ 
+char *getFileName(char **urlList, int i)
+{
+    char *fileName; 
+
+    fileName = malloc(strlen(urlList[i]) + 1); 
+    strcpy(fileName, urlList[i]); 
+    fileName = realloc(fileName, strlen(urlList[i]) + strlen(".txt") + 1);
+    strcat(fileName, ".txt");
+
+    return fileName; 
+}
+
+/**
+ * @brief - The following helper function will insert the link into the
+ * urlGraph, if it there exists a link with the provided url.
+ * 
+ * @param tempString - A string that holds the contents of the url file
+ * @param urlList - The array holding all the urls
+ * @param url - The graph we want to insert the link into
+ * @param i - the particular index we want to insert into
+**/ 
+void insertLink(char *tempString, char **urlList, Graph url, int i)
+{
+    if (checkIsLink(tempString, urlList))
+    {
+        int pos = checkLinkPosition(checkNumberUrls(), tempString, urlList);
+        insertEdge(url, i, pos, 1);  
+    }
+}
+
+void GetCollection(FILE *collectionFile, char *tempStringOne, char **urlList)
+{
+    for (int i = 0; fscanf(collectionFile, "%s", tempStringOne) != EOF; i++)
     { 
         urlList[i] = malloc(strlen(tempStringOne) + 1); 
         strcpy(urlList[i], tempStringOne); 
-        numLinks++; 
     }
 
-    fclose(fp); 
-     
+    fclose(collectionFile); 
+}
 
+/**
+ * @brief - The following function will create a new graph by adding
+ * relevant urls and outgoing links. 
+ * 
+ * @return - A new urlGraph
+**/ 
+Graph GetGraph()
+{
+    FILE *collectionFile = fopen("collection.txt", "r"); 
+    char *urlList[MAX]; 
+    char tempStringOne[MAX]; 
+
+    // the following code will read through collection and place the urls's
+    // into the new urlList array 
+    for (int i = 0; fscanf(collectionFile, "%s", tempStringOne) != EOF; i++)
+    { 
+        urlList[i] = malloc(strlen(tempStringOne) + 1); 
+        strcpy(urlList[i], tempStringOne); 
+    }
+    fclose(collectionFile); 
+    
+
+    int numLinks = checkNumberUrls(); 
     Graph urlGraph = newGraph(numLinks); 
     char tempStringTwo[MAX]; 
-    char *fileName; 
-    // Edge e; 
 
+    // the following code will open each of the urls and add
+    // the relevant urls and outgoing links 
     for (int i = 0; i < numLinks; i++)
     {
-        // copy the url into the new fileName array and reallocate some memory 
-        // for the .txt file extension and finally join the filename and the 
-        // .txt together!
-        fileName = malloc(strlen(urlList[i]) + 1); 
-        strcpy(fileName, urlList[i]); // potential bug 
-        // printf("file name : %s\n", fileName); 
-        fileName = realloc(fileName, strlen(urlList[i]) + strlen(".txt") + 1); // potential bug 
-        strcat(fileName, ".txt"); 
+        char *fileName = getFileName(urlList, i);
 
         FILE *fileOfInterest = fopen(fileName, "r"); 
-        
-
         while (fscanf(fileOfInterest, "%s", tempStringTwo) != EOF)
         {
-            // printf("files inside : %s\n", tempStringTwo); 
-            if (checkIsLink(tempStringTwo, urlList))
-            {
-                // potential bug 
-                // e.v = i; 
-                // printf("I am here!\n"); 
-                int pos = checkLinkPosition(numLinks, tempStringTwo, urlList);
-                insertEdge(urlGraph, i, pos, 1);  
-            }
+            insertLink(tempStringTwo, urlList, urlGraph, i); 
         } 
         fclose(fileOfInterest); 
         free(fileName); 
     }
-    // free(urlList); 
+    freeUrlsArray(urlList, numLinks); 
     return urlGraph; 
 }
-
-
-
-// // potential bug 
-// char **GetCollection()
-// {
-//     // Following code will open the collection 
-//     FILE *fp = fopen("collection.txt", "r"); 
-//     char **urlList = NULL; 
-//     char tempStringOne[MAX]; 
-//     int numLinks = 0;   
-
-//     // the following code will read through collection and place the Urls's
-//     // into the new urlList array 
-//     for (int i = 0; fscanf(fp, "%s", tempString) != EOF; i++)
-//     {
-//         urlList[i] = malloc(strlen(tempString)); 
-//         strcpy(urlList[i], tempString); 
-//         numLinks++; 
-//     }
-
-//     fclose(fp); 
-    
-//     return urlList; 
-// }
-

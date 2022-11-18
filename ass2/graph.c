@@ -1,5 +1,6 @@
 // Weighted Graph ADT
 // Adjacency Matrix Representation ... COMP2521 
+// the following code was adapted from the lecture slide code 
 #include "graph.h"
 #include <assert.h>
 #include <stdlib.h>
@@ -60,12 +61,6 @@ void removeEdge(Graph g, Vertex v, Vertex w) {
       g->nE--;
    }
 }
-
-// int adjacent(Graph g, Vertex v, Vertex w) {
-//    assert(g != NULL && validV(g,v) && validV(g,w));
-
-//    return g->edges[v][w];
-// }
 
 void showGraph(Graph g) {
     assert(g != NULL);
