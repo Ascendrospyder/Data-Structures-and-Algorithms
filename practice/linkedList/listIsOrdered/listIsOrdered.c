@@ -4,7 +4,7 @@
 int countNumNodes(List l)
 {
 	int numNodes = 0; 
-	List current = l->head; 
+	Node current = l->head; 
 
 	while (current != NULL)
 	{
@@ -19,22 +19,41 @@ bool listIsOrdered(List l) {
 	// steps:
 	// 1. loop through the list and check if the value of the next element 
 	// is bigger than the previous one 
-	List current = l->head;
-	int counter = 0; 
+	
+	Node currentAscending = l->head;
+	Node currentDescending = l->head; 
+	if (currentAscending == NULL || currentDescending == NULL) return true; 
+	int counterAscending = 0; 
+	int counterDescending = 0; 
+	int numNodes = countNumNodes(l); 
+	// printf("num nodes = %d\n", numNodes); 
 
-	while (current != NULL)
+	
+	while (currentAscending->next != NULL)
 	{
-		if (current->value > current->next->value)
+		if (currentAscending->value <= currentAscending->next->value)
 		{
-			counter++; 
+			counterAscending++; 
 		}
-		current = current->next; 
+		// printf("currentAscending = %d\tcurrentAscending next = %d\tcounterAscending = %d\n", currentAscending->value, currentAscending->next->value, counterAscending);
+		currentAscending = currentAscending->next; 
 	}
 
-	if (counter == countNumNodes(l))
+	while (currentDescending->next != NULL)
+	{
+		if (currentDescending->value > currentDescending->next->value)
+		{
+			counterDescending++; 
+		}
+		// printf("currentDescending = %d\tcurrentDescending next = %d\tcounterAscending = %d\n", currentDescending->value, currentDescending->next->value, counterDescending);
+		currentDescending = currentDescending->next; 
+	}
+	
+
+	if (counterAscending == numNodes - 1 || counterDescending == numNodes - 1)
 	{
 		return true; 
-	}
-	return false;
+	} 
+	return false; 
 }
 
