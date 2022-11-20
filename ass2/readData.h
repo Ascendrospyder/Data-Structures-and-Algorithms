@@ -1,3 +1,5 @@
+// readData ADT interface 
+
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
@@ -6,9 +8,9 @@
 
 #include "graph.h"
 
-Graph GetGraph(); 
+Graph GetGraph(void); 
 void GetCollection(FILE *, char *, char **);
-int checkNumberUrls(); 
-bool checkIsLink(char *, char **); 
-int checkLinkPosition(int, char *, char **); 
-void freeUrlsArray(char **, int); 
+int CheckNumberUrls(); 
+bool CheckIsLink(char *, char **); 
+int CheckLinkPosition(int, char *, char **); 
+void FreeUrlsArray(char **, int); 

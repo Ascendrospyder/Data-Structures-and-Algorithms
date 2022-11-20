@@ -1,4 +1,5 @@
 // Weighted Graph ADT interface ... COMP2521 
+// adapted from the lecture code 
 #ifndef GRAPH_H
 #define GRAPH_H
 

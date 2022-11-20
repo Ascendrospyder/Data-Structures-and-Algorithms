@@ -2,7 +2,12 @@
 // The following file was indented by clang format
 
 // Written by: Arindam Mukherjee
+// zId : z5421641
 // Date: 4 / 11 / 2022
+/*
+    Description: The following program calculates Weighted PageRanks for 
+    a collection of pages.
+*/ 
 
 #include <assert.h>
 #include <ctype.h>
@@ -18,89 +23,90 @@
 #define MAX 1000
 
 ///////////////////////////////// function declarations ///////////////////////
-double findWeightedInlinks(Graph g, Vertex v, Vertex w);
-double numLinksToPage(Graph g, Vertex v);
-double numLinksToReference(Graph g, Vertex w);
-double findWeightedOutlinks(Graph g, Vertex v, Vertex w);
-double numOutlinksFromPage(Graph g, Vertex v);
-double numOutLinksFromReference(Graph g, Vertex w);
-void sortDescendingPrint(double *pageRank, int *outDegree, int len,
-                         char **urlList);
-void initialisePageRankArray(double *pageRank, double *previousPageRank,
-                             int numUrls, double numUrlsFloat);
-void updatePreviousPageRankArray(double *pageRank, double *previousPageRank,
+static double findWeightedInlinks(Graph g, Vertex v, Vertex w);
+static double numLinksToPage(Graph g, Vertex v);
+static double numLinksToReference(Graph g, Vertex w);
+static double findWeightedOutlinks(Graph g, Vertex v, Vertex w);
+static double numOutlinksFromPage(Graph g, Vertex v);
+static double numOutLinksFromReference(Graph g, Vertex w);
+static void sortDescendingPrint(double *pageRank, int *outDegree, int len,
+                                char **urlList);
+static void initialisePageRankArray(double *pageRank, double *previousPageRank,
+                                    int numUrls, double numUrlsFloat);
+static void updatePreviousPageRankArray(double *pageRank, 
+                                        double *previousPageRank,
+                                        int numUrls);
+static double calculatePreviousPageRank(Graph url, double *previousPRArray, 
+                                        int i, int numUrls);
+static double calculateSumOfDiff(double *pageRank, double *previousPageRank,
                                  int numUrls);
-double calculatePreviousPageRank(Graph url, double *previousPRArray, int i,
-                                 int numUrls);
-double calculateSumOfDiff(double *pageRank, double *previousPageRank,
-                          int numUrls);
-void populateOutdegree(Graph urlGraph, int *outDegree, int numUrls);
+static void populateOutdegree(Graph urlGraph, int *outDegree, int numUrls);
 ///////////////////////////////// function declarations ///////////////////////
 
 int main(int argc, char *argv[]) 
 {
-	// argc is the number of command-line arguments, which includes the
-	// program name
-	// argv is the array of command-line arguments
-	if (argc != 4) {
-		fprintf(stderr, "Usage: %s dampingFactor diffPR maxIterations\n",
-		        argv[0]);
-		return EXIT_FAILURE;
-	}
+    // argc is the number of command-line arguments, which includes the
+    // program name
+    // argv is the array of command-line arguments
+    if (argc != 4) {
+        fprintf(stderr, "Usage: %s dampingFactor diffPR maxIterations\n",
+                argv[0]);
+        return EXIT_FAILURE;
+    }
 
-	double d = atof(argv[1]);
-	double diffPR = atof(argv[2]);
-	int maxIterations = atoi(argv[3]);
+    double d = atof(argv[1]);
+    double diffPR = atof(argv[2]);
+    int maxIterations = atoi(argv[3]);
 
-	// Read pages from the collection in file collection.txt and build a graph structure
-	// using a graph representation of your choice
-	FILE *collectionFile = fopen("collection.txt", "r");
-	char *urlList[MAX];
-	char tempStringOne[MAX];
+    // Read pages from the collection in file collection.txt and build a 
+    // graph structure using a graph representation
+    FILE *collectionFile = fopen("collection.txt", "r");
+    char *urlList[MAX];
+    char tempBufferString[MAX];
 
-	GetCollection(collectionFile, tempStringOne, urlList);
+    GetCollection(collectionFile, tempBufferString, urlList);
     Graph urlGraph = GetGraph();
 
-	int numUrls = checkNumberUrls();
-	double numUrlsFloat = (double)numUrls;
-	double pageRank[numUrls];
-	double previousPageRank[numUrls];
-	double sumOfDiff = 0.0;
+    int numUrls = CheckNumberUrls();
+    double numUrlsFloat = (double)numUrls;
+    double pageRank[numUrls];
+    double previousPageRank[numUrls];
+    double sumOfDiff = 0.0;
 
-	// set the pagerank arrays' to 1/n
-	initialisePageRankArray(pageRank, previousPageRank, numUrls, numUrlsFloat);
+    // set the pagerank arrays' to 1/n
+    initialisePageRankArray(pageRank, previousPageRank, numUrls, numUrlsFloat);
 
-    // Here, we will calculate the pageRanks and pass them into the pageRank array 
-    // at a particular index
-	int iteration = 0;
-	double diff = diffPR;
-	while (iteration < maxIterations && diff >= diffPR) 
+    // Here, we will calculate the pageRanks and pass them into the pageRank 
+    // array at a particular index
+    int iteration = 0;
+    double diff = diffPR;
+    while (iteration < maxIterations && diff >= diffPR) 
     {
-		sumOfDiff = 0.0;
-		updatePreviousPageRankArray(pageRank, previousPageRank, numUrls);
+        sumOfDiff = 0.0;
+        updatePreviousPageRankArray(pageRank, previousPageRank, numUrls);
 
-		for (int i = 0; i < numUrls; i++) 
+        for (int i = 0; i < numUrls; i++) 
         {
-			double previousWeightedPageRank = calculatePreviousPageRank(
-			    urlGraph, previousPageRank, i, numUrls);
-			pageRank[i] =
-			    ((1.0 - d) / (numUrlsFloat)) + (d * previousWeightedPageRank);
-		}
+            double previousWeightedPageRank = calculatePreviousPageRank(
+                urlGraph, previousPageRank, i, numUrls);
+            pageRank[i] =
+                ((1.0 - d) / (numUrlsFloat)) + (d * previousWeightedPageRank);
+        }
 
-		sumOfDiff = calculateSumOfDiff(pageRank, previousPageRank, numUrls);
-		diff = sumOfDiff;
-		iteration++;
-	}
+        sumOfDiff = calculateSumOfDiff(pageRank, previousPageRank, numUrls);
+        diff = sumOfDiff;
+        iteration++;
+    }
 
-	int outDegree[numUrls];
-	populateOutdegree(urlGraph, outDegree, numUrls);
+    int outDegree[numUrls];
+    populateOutdegree(urlGraph, outDegree, numUrls);
 
     // print the urls, outdegrees and pageRanks 
-	sortDescendingPrint(pageRank, outDegree, numUrls, urlList);
+    sortDescendingPrint(pageRank, outDegree, numUrls, urlList);
 
     // finally free the urls and graph 
-	freeUrlsArray(urlList, numUrls);
-	freeGraph(urlGraph);
+    FreeUrlsArray(urlList, numUrls);
+    freeGraph(urlGraph);
 }
 
 /**
@@ -108,14 +114,17 @@ int main(int argc, char *argv[])
  * graph as given by the formula in:
  * https://cgi.cse.unsw.edu.au/~cs2521/22T3/ass/ass2/resources/Weighted-PageRank-Algorithm.pdf
  * 
+ * ^ the url above is more than 80 lines to make it easier for the marker to 
+ * access
+ * 
  * @param g - Graph of interest 
  * @param v - Vertex of interest 
  * @param w - Vertex of interest
  * @return double - number of weighted inlinks 
  */
-double findWeightedInlinks(Graph g, Vertex v, Vertex w) 
+static double findWeightedInlinks(Graph g, Vertex v, Vertex w) 
 {
-	return numLinksToPage(g, w) / numLinksToReference(g, v);
+    return numLinksToPage(g, w) / numLinksToReference(g, v);
 }
 
 /**
@@ -125,17 +134,17 @@ double findWeightedInlinks(Graph g, Vertex v, Vertex w)
  * @param v - Vertex of interest 
  * @return double - total links 
  */
-double numLinksToPage(Graph g, Vertex v) {
-	double total = 0;
-	int numUrls = checkNumberUrls();
-	for (int i = 0; i < numUrls; i++) 
+static double numLinksToPage(Graph g, Vertex v) {
+    double total = 0;
+    int numUrls = CheckNumberUrls();
+    for (int i = 0; i < numUrls; i++) 
     {
-		if (i != v && GraphCheckAdjacent(g, i, v)) 
+        if (i != v && GraphCheckAdjacent(g, i, v)) 
         {
-			total++;
-		}
-	}
-	return total;
+            total++;
+        }
+    }
+    return total;
 }
 
 /**
@@ -145,19 +154,22 @@ double numLinksToPage(Graph g, Vertex v) {
  * @param w - Vertex of interest 
  * @return double 
  */
-double numLinksToReference(Graph g, Vertex w) 
+/**
+ * 
+*/
+static double numLinksToReference(Graph g, Vertex w) 
 {
-	double total = 0;
-	int numUrls = checkNumberUrls();
+    double total = 0;
+    int numUrls = CheckNumberUrls();
 
-	for (int i = 0; i < numUrls; i++) 
+    for (int i = 0; i < numUrls; i++) 
     {
-		if (i != w && GraphCheckAdjacent(g, w, i)) 
+        if (i != w && GraphCheckAdjacent(g, w, i)) 
         {
-			total += numLinksToPage(g, i);
-		}
-	}
-	return total;
+            total += numLinksToPage(g, i);
+        }
+    }
+    return total;
 }
 
 /**
@@ -165,14 +177,17 @@ double numLinksToReference(Graph g, Vertex w)
  * graph as given by the formula in:
  * https://cgi.cse.unsw.edu.au/~cs2521/22T3/ass/ass2/resources/Weighted-PageRank-Algorithm.pdf
  * 
+ * ^ the url above is more than 80 lines to make it easier for the marker to 
+ * access
+ * 
  * @param g - Graph of interest 
  * @param v - Vertex of interest
  * @param w - Vertex of interest 
  * @return double - weighted outlink 
  */
-double findWeightedOutlinks(Graph g, Vertex v, Vertex w) 
+static double findWeightedOutlinks(Graph g, Vertex v, Vertex w) 
 {
-	return numOutlinksFromPage(g, w) / numOutLinksFromReference(g, v);
+    return numOutlinksFromPage(g, w) / numOutLinksFromReference(g, v);
 }
 
 /**
@@ -182,21 +197,21 @@ double findWeightedOutlinks(Graph g, Vertex v, Vertex w)
  * @param v - Vertex of interest 
  * @return double - number of outlinks from a page 
  */
-double numOutlinksFromPage(Graph g, Vertex v) 
+static double numOutlinksFromPage(Graph g, Vertex v) 
 {
-	double total = 0;
-	int numUrls = checkNumberUrls();
+    double total = 0;
+    int numUrls = CheckNumberUrls();
 
-	for (int i = 0; i < numUrls; i++) 
+    for (int i = 0; i < numUrls; i++) 
     {
-		if (i != v && GraphCheckAdjacent(g, v, i)) 
+        if (i != v && GraphCheckAdjacent(g, v, i)) 
         {
-			total++;
-		}
-	}
+            total++;
+        }
+    }
 
-	if (total == 0) total = 0.5;
-	return total;
+    if (total == 0) total = 0.5;
+    return total;
 }
 
 /**
@@ -206,19 +221,19 @@ double numOutlinksFromPage(Graph g, Vertex v)
  * @param w - Vertex of interest 
  * @return double - number of outlinks from the reference 
  */
-double numOutLinksFromReference(Graph g, Vertex w) 
+static double numOutLinksFromReference(Graph g, Vertex w) 
 {
-	double total = 0;
-	int numUrls = checkNumberUrls();
+    double total = 0;
+    int numUrls = CheckNumberUrls();
 
-	for (int i = 0; i < numUrls; i++) 
+    for (int i = 0; i < numUrls; i++) 
     {
-		if (i != w && GraphCheckAdjacent(g, w, i)) 
+        if (i != w && GraphCheckAdjacent(g, w, i)) 
         {
-			total += numOutlinksFromPage(g, i);
-		}
-	}
-	return total;
+            total += numOutlinksFromPage(g, i);
+        }
+    }
+    return total;
 }
 
 /**
@@ -234,21 +249,22 @@ double numOutLinksFromReference(Graph g, Vertex w)
  * @param i - i'th index 
  * @param j - j'th index 
  */
-void swapElementsInArray(double tempPr, double *pageRank, int tempOutdegree,
-                         int *outDegree, char *tempUrlList, char **urlList,
-                         int i, int j) 
+static void swapElementsInArray(double tempPr, double *pageRank, 
+                                int tempOutdegree, int *outDegree, 
+                                char *tempUrlList, char **urlList,
+                                int i, int j) 
 {
-	tempPr = pageRank[i];
-	pageRank[i] = pageRank[j];
-	pageRank[j] = tempPr;
+    tempPr = pageRank[i];
+    pageRank[i] = pageRank[j];
+    pageRank[j] = tempPr;
 
-	tempOutdegree = outDegree[i];
-	outDegree[i] = outDegree[j];
-	outDegree[j] = tempOutdegree;
+    tempOutdegree = outDegree[i];
+    outDegree[i] = outDegree[j];
+    outDegree[j] = tempOutdegree;
 
-	tempUrlList = urlList[i];
-	urlList[i] = urlList[j];
-	urlList[j] = tempUrlList;
+    tempUrlList = urlList[i];
+    urlList[i] = urlList[j];
+    urlList[j] = tempUrlList;
 }
 
 /**
@@ -262,41 +278,41 @@ void swapElementsInArray(double tempPr, double *pageRank, int tempOutdegree,
  * @param urlList - Url array 
  * @param tempPr - tempPr to swap pageRanks
  * @param tempOutdegree - tempOutdegree to swap outdegrees 
- * @param tempUrlList - tempUrlList to swap the given urls 
+ * @param tempUrl - tempUrlList to swap the given urls 
  */
-void sortPageRank(double *pageRank, int *outDegree, int len, char **urlList,
-                  double tempPr, int tempOutdegree,
-                  char *tempUrlList) 
+static void sortPageRank(double *pageRank, int *outDegree, int len, char **url,
+                         double tempPr, int tempOutdegree,
+                         char *tempUrl) 
 {
-	// the following code will sort in descending order by Weighted PageRank
-	for (int i = 0; i < len; i++) 
-	{
-		for (int j = i + 1; j < len; j++) 
-        {
-			if (pageRank[i] < pageRank[j]) 
-            {
-				swapElementsInArray(tempPr, pageRank, tempOutdegree, outDegree,
-				                    tempUrlList, urlList, i, j);
-			}
-		}
-	}
-
-	// the following code will sort pages with the same Weighted PageRank in 
-	//increasing alphabetical order by URL
-	for (int i = 0; i < len; i++) 
+    // the following code will sort in descending order by Weighted PageRank
+    for (int i = 0; i < len; i++) 
     {
-		for (int j = i + 1; j < len; j++) 
+        for (int j = i + 1; j < len; j++) 
         {
-			if (pageRank[i] == pageRank[j]) 
+            if (pageRank[i] < pageRank[j]) 
             {
-				if (strcmp(urlList[i], urlList[j]) > 0) 
+                swapElementsInArray(tempPr, pageRank, tempOutdegree, outDegree,
+                                    tempUrl, url, i, j);
+            }
+        }
+    }
+
+    // the following code will sort pages with the same Weighted PageRank in 
+    //increasing alphabetical order by URL
+    for (int i = 0; i < len; i++) 
+    {
+        for (int j = i + 1; j < len; j++) 
+        {
+            if (pageRank[i] == pageRank[j]) 
+            {
+                if (strcmp(url[i], url[j]) > 0) 
                 {
-					swapElementsInArray(tempPr, pageRank, tempOutdegree,
-					                    outDegree, tempUrlList, urlList, i, j);
-				}
-			}
-		}
-	}
+                    swapElementsInArray(tempPr, pageRank, tempOutdegree,
+                                        outDegree, tempUrl, url, i, j);
+                }
+            }
+        }
+    }
 }
 
 /**
@@ -308,19 +324,21 @@ void sortPageRank(double *pageRank, int *outDegree, int len, char **urlList,
  * @param len - length of urls 
  * @param urlList - url array 
  */
-void sortDescendingPrint(double *pageRank, int *outDegree, int len,
-                         char **urlList) {
-	double pageRankTemp = 0.0;
-	int outDegreeTemp = 0;
-	char *urlListTemp = 0;
+static void sortDescendingPrint(double *pageRank, int *outDegree, int len,
+                                char **urlList) 
+{
+    double pageRankTemp = 0.0;
+    int outDegreeTemp = 0;
+    char *urlListTemp = 0;
 
-	sortPageRank(pageRank, outDegree, len, urlList, pageRankTemp, outDegreeTemp,
-	             urlListTemp);
+    sortPageRank(pageRank, outDegree, len, urlList, pageRankTemp, 
+                 outDegreeTemp,
+                 urlListTemp);
 
-	for (int k = 0; k < len; k++) 
+    for (int k = 0; k < len; k++) 
     {
-		printf("%s %d %.7f\n", urlList[k], outDegree[k], pageRank[k]);
-	}
+        printf("%s %d %.7f\n", urlList[k], outDegree[k], pageRank[k]);
+    }
 }
 
 /**
@@ -332,14 +350,14 @@ void sortDescendingPrint(double *pageRank, int *outDegree, int len,
  * @param numUrls - number of urls 
  * @param numUrlsFloat - number of urls as a double value 
  */
-void initialisePageRankArray(double *pageRank, double *previousPageRank,
-                             int numUrls, double numUrlsFloat) 
+static void initialisePageRankArray(double *pageRank, double *previousPageRank,
+                                    int numUrls, double numUrlsFloat) 
 {
-	for (int i = 0; i < numUrls; i++) 
+    for (int i = 0; i < numUrls; i++) 
     {
-		pageRank[i] = (1.0 / numUrlsFloat);
-		previousPageRank[i] = (1.0 / numUrlsFloat);
-	}
+        pageRank[i] = (1.0 / numUrlsFloat);
+        previousPageRank[i] = (1.0 / numUrlsFloat);
+    }
 }
 
 /**
@@ -350,18 +368,21 @@ void initialisePageRankArray(double *pageRank, double *previousPageRank,
  * @param previousPageRank - previous pageRank array
  * @param numUrls - number of urls 
  */
-void updatePreviousPageRankArray(double *pageRank, double *previousPageRank,
-                                 int numUrls) 
+static void updatePreviousPageRankArray(double *pageRank, 
+                                        double *previousPageRank, int numUrls) 
 {
-	for (int j = 0; j < numUrls; j++) 
+    for (int j = 0; j < numUrls; j++) 
     {
-		previousPageRank[j] = pageRank[j];
-	}
+        previousPageRank[j] = pageRank[j];
+    }
 }
 
 /**
  * @brief - Calculate the previous pageRank as given by the formula in: 
  * https://cgi.cse.unsw.edu.au/~cs2521/22T3/ass/ass2/resources/Weighted-PageRank-Algorithm.pdf
+ * 
+ * ^ the url above is more than 80 lines to make it easier for the marker to 
+ * access
  * 
  * @param url - graph holding the url 
  * @param previousPRArray - previous pageRank array 
@@ -369,20 +390,20 @@ void updatePreviousPageRankArray(double *pageRank, double *previousPageRank,
  * @param numUrls - number of urls 
  * @return double - returns the previousPageRank 
  */
-double calculatePreviousPageRank(Graph url, double *previousPRArray, int i,
-                                 int numUrls) 
+static double calculatePreviousPageRank(Graph url, double *previousPRArray, 
+                                        int i, int numUrls) 
 {
-	double previousPR = 0.0;
-	for (int j = 0; j < numUrls; j++) 
+    double previousPR = 0.0;
+    for (int j = 0; j < numUrls; j++) 
     {
-		if (i != j && GraphCheckAdjacent(url, j, i)) 
+        if (i != j && GraphCheckAdjacent(url, j, i)) 
         {
-			previousPR = previousPR + (previousPRArray[j] * 
+            previousPR = previousPR + (previousPRArray[j] * 
                                        findWeightedInlinks(url, j, i) *
-			                           findWeightedOutlinks(url, j, i));
-		}
-	}
-	return previousPR;
+                                       findWeightedOutlinks(url, j, i));
+        }
+    }
+    return previousPR;
 }
 
 /**
@@ -395,15 +416,15 @@ double calculatePreviousPageRank(Graph url, double *previousPRArray, int i,
  * @param numUrls - number of urls 
  * @return double - returns the new diff value after applying the formula 
  */
-double calculateSumOfDiff(double *pageRank, double *previousPageRank,
-                          int numUrls) 
+static double calculateSumOfDiff(double *pageRank, double *previousPageRank,
+                                 int numUrls) 
 {
-	double sumOfDiff = 0.0;
-	for (int k = 0; k < numUrls; k++) 
+    double sumOfDiff = 0.0;
+    for (int k = 0; k < numUrls; k++) 
     {
-		sumOfDiff = sumOfDiff + fabs(pageRank[k] - previousPageRank[k]);
-	}
-	return sumOfDiff;
+        sumOfDiff = sumOfDiff + fabs(pageRank[k] - previousPageRank[k]);
+    }
+    return sumOfDiff;
 }
 
 /**
@@ -414,10 +435,10 @@ double calculateSumOfDiff(double *pageRank, double *previousPageRank,
  * @param outDegree - outDegree array 
  * @param numUrls - number of urls 
  */
-void populateOutdegree(Graph urlGraph, int *outDegree, int numUrls) 
+static void populateOutdegree(Graph urlGraph, int *outDegree, int numUrls) 
 {
-	for (int i = 0; i < numUrls; i++) 
+    for (int i = 0; i < numUrls; i++) 
     {
-		outDegree[i] = (int)numOutlinksFromPage(urlGraph, i);
-	}
+        outDegree[i] = (int)numOutlinksFromPage(urlGraph, i);
+    }
 }
