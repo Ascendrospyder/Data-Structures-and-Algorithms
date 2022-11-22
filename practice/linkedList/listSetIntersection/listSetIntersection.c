@@ -32,8 +32,7 @@ List listSetIntersection(List s1, List s2) {
 			prepend(new, current->value); 
 		}
 	}
-	// new = listSortedCopy(new); 
-
+	
 	return new;
 }
 
