@@ -1,0 +1,47 @@
+==3316313== Memcheck, a memory error detector
+==3316313== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==3316313== Using Valgrind-3.16.1 and LibVEX; rerun with -h for copyright info
+==3316313== Command: ./testFurthestReachable
+==3316313== 
+==3316313== Invalid write of size 4
+==3316313==    at 0x1093E0: furthestReachable (furthestReachable.c:43)
+==3316313==    by 0x10920F: main (testFurthestReachable.c:16)
+==3316313==  Address 0x4a443c4 is 0 bytes after a block of size 4 alloc'd
+==3316313==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==3316313==    by 0x109399: furthestReachable (furthestReachable.c:37)
+==3316313==    by 0x10920F: main (testFurthestReachable.c:16)
+==3316313== 
+==3316313== Invalid write of size 4
+==3316313==    at 0x10932B: doFurthestReachable (furthestReachable.c:20)
+==3316313==    by 0x109427: furthestReachable (furthestReachable.c:46)
+==3316313==    by 0x10920F: main (testFurthestReachable.c:16)
+==3316313==  Address 0x4a443c4 is 0 bytes after a block of size 4 alloc'd
+==3316313==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==3316313==    by 0x109399: furthestReachable (furthestReachable.c:37)
+==3316313==    by 0x10920F: main (testFurthestReachable.c:16)
+==3316313== 
+==3316313== Invalid write of size 4
+==3316313==    at 0x10932B: doFurthestReachable (furthestReachable.c:20)
+==3316313==    by 0x10934D: doFurthestReachable (furthestReachable.c:22)
+==3316313==    by 0x109427: furthestReachable (furthestReachable.c:46)
+==3316313==    by 0x10920F: main (testFurthestReachable.c:16)
+==3316313==  Address 0x4a443d8 is 20 bytes after a block of size 4 alloc'd
+==3316313==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==3316313==    by 0x109399: furthestReachable (furthestReachable.c:37)
+==3316313==    by 0x10920F: main (testFurthestReachable.c:16)
+==3316313== 
+==3316313== 
+==3316313== HEAP SUMMARY:
+==3316313==     in use at exit: 32 bytes in 2 blocks
+==3316313==   total heap usage: 13 allocs, 11 frees, 16,537 bytes allocated
+==3316313== 
+==3316313== LEAK SUMMARY:
+==3316313==    definitely lost: 32 bytes in 2 blocks
+==3316313==    indirectly lost: 0 bytes in 0 blocks
+==3316313==      possibly lost: 0 bytes in 0 blocks
+==3316313==    still reachable: 0 bytes in 0 blocks
+==3316313==         suppressed: 0 bytes in 0 blocks
+==3316313== Rerun with --leak-check=full to see details of leaked memory
+==3316313== 
+==3316313== For lists of detected and suppressed errors, rerun with: -s
+==3316313== ERROR SUMMARY: 12 errors from 3 contexts (suppressed: 0 from 0)

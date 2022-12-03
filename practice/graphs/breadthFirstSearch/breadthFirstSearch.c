@@ -5,31 +5,36 @@
 #include "Graph.h"
 #include "Queue.h"
 
-void breadthFirstSearch(Graph g, int src) 
-{
-	int *visited = calloc(GraphNumVertices(g), sizeof(int)); 
-	Vertex v; 
-	visited[src] = src; 
-
-	Queue q = QueueNew(); 
-	QueueEnqueue(q, src); 
-	while(!QueueIsEmpty(q))
+void breadthFirstSearch(Graph g, int src) {
+	// TODO
+	int *visited = calloc(GraphNumVertices(g), sizeof(int));
+	if (visited == NULL)
 	{
-		v = QueueDequeue(q); 
+		fprintf(stderr, "Failed to malloc!\n"); 
+		exit(EXIT_FAILURE); 
+	}
+
+	visited[src] = src; 
+	Queue q = QueueNew(); 
+	
+	QueueEnqueue(q, src); 
+	printf("%d ", src); 
+	while (!QueueIsEmpty(q))
+	{
+		Vertex v = QueueDequeue(q);
 		visited[v] = 1; 
-		printf("%d ", v);
 		for (Vertex w = 0; w < GraphNumVertices(g); w++)
 		{
 			if (GraphIsAdjacent(g, v, w) && visited[w] == 0)
 			{
-				visited[w] = 1;  
+				visited[w] = 1; 
+				printf("%d ", w); 
 				QueueEnqueue(q, w); 
-			} 
+			}
 		}
-		
 	}
+
 	QueueFree(q); 
 	free(visited); 
 }
-
 

@@ -1,0 +1,27 @@
+Question 1
+
+(a) What is the maximum input size that can be processed? Justify your
+    answer.
+    Since a process of input size 10 takes one day to run, and a computer, that 
+    runs the following algorithm 1000 times faster, this as a result means that
+    it would take 1/1000th of a day to process 10 inputs. As a result, to determine
+    the maximum input size, we would need to solve for n, where 2^n <= 1000 * 2^10.
+    2^n <= 1000*2^10 --> n = floor(log_2(1000 x 2^10)) --> floor(19.966) -> 19. Therefore, 
+    it will take a max input of 524288 inputs. 
+
+
+(b) Which of the two algorithms is more efficient? Justify your answer.
+    Both the algorithms will be efficient. This being as a for n number of inputs, for the first algorithm, 
+    we would need to make 1 * log_2(n) amounts of comparisons. This in comparison to the second algorithm, where for n 
+    inputs, we would need to make 3 * log_4(n) comparisons. As a result, in big O they both will equate to taking O(log(n)) time. 
+
+
+(c) What are the time complexities of fnA() and fnB() in terms of a and
+    b? Justify your answer.
+    The time complexity of fnA is O(b - a). This being as, the recursive call increments the value of a, until 
+    it equals b, where it can return a. As a result, this in turn means that we will need to make b - a calls to 
+    reach the base case of b - a. The time complexity of fnB is O((b - a)^2), this being as it calls fnA while needing 
+    b - a calls to hit the base case. Therefore (b - a) * (b - a) = O((b - a)^2)
+
+
+

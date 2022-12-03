@@ -4,32 +4,29 @@
 
 #include "Graph.h"
 
-int visited[1000]; 
+void dfsPathCheck(Graph g, int nV, Vertex v, int *visited); 
 
-static void dfsPathCheck(Graph g, int numV, Vertex v, int *visited); 
-
-void depthFirstSearch(Graph g, int src) {
+void depthFirstSearch(Graph g, int src) 
+{
 	// TODO
-	int nV = GraphNumVertices(g);
-	int *visited = calloc(nV, sizeof(int)); 
-
-	dfsPathCheck(g, nV, src, visited); 
-
+	int *visited = calloc(GraphNumVertices(g), sizeof(int)); 
+	visited[src] = src;
+	printf("%d ", src);
+	dfsPathCheck(g, GraphNumVertices(g), src, visited); 
 	free(visited); 
 }
 
-
-static void dfsPathCheck(Graph g, int numV, Vertex v, int *visited)
+void dfsPathCheck(Graph g, int nV, Vertex v, int *visited) 
 {
-	printf("%d ", v); 
-	visited[v] = 1; 
-	for (Vertex w = 0; w < numV; w++)
+	for (Vertex w = 0; w < nV; w++)
 	{
-		if (GraphIsAdjacent(g, v, w) && !visited[w])
+		visited[v] = 1;  
+		if (GraphIsAdjacent(g, v, w) && visited[w] == 0)
 		{
-			dfsPathCheck(g, numV, w, visited); 
+			visited[w] = 1; 
+			printf("%d ", w); 
+			dfsPathCheck(g, nV, w, visited); 
 		}
 	}
 }
-
 

@@ -1,0 +1,12 @@
+Question 2
+
+(a) What are the time complexities of fnA() and fnB() in terms of a and
+    b? Justify your answer.
+
+   
+
+
+(b) What does the function fn() do? Justify your answer.
+
+
+

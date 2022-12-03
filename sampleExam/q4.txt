@@ -1,0 +1,20 @@
+Question 4
+
+(a) How many words are stored in this trie?
+    11
+
+
+(b) Which nodes would be visited in searching for "deeds"?
+    1 node will be searched and that is d 
+
+
+(c) Explain what changes would be made in the trie if the word "bogus"
+    was added.
+    we would traverse through bog and add u and s where s is marked as a finishing node 
+
+
+(d) Explain what changes would be made in the trie if the word "do" was
+    added.
+
+
+

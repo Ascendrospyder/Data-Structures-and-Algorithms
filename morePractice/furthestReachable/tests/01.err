@@ -1,0 +1,61 @@
+==3316278== Memcheck, a memory error detector
+==3316278== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==3316278== Using Valgrind-3.16.1 and LibVEX; rerun with -h for copyright info
+==3316278== Command: ./testFurthestReachable
+==3316278== 
+==3316278== Invalid write of size 4
+==3316278==    at 0x1093E0: furthestReachable (furthestReachable.c:43)
+==3316278==    by 0x10920F: main (testFurthestReachable.c:16)
+==3316278==  Address 0x4a44624 is 0 bytes after a block of size 4 alloc'd
+==3316278==    at 0x483877F: malloc (vg_replace_malloc.c:307)
+==3316278==    by 0x109399: furthestReachable (furthestReachable.c:37)
+==3316278==    by 0x10920F: main (testFurthestReachable.c:16)
+==3316278== 
+
+valgrind: m_mallocfree.c:303 (get_bszB_as_is): Assertion 'bszB_lo == bszB_hi' failed.
+valgrind: Heap block lo/hi size mismatch: lo = 80, hi = 18446744073709551615.
+This is probably caused by your program erroneously writing past the
+end of a heap block and corrupting heap metadata.  If you fix any
+invalid writes reported by Memcheck, this assertion failure will
+probably go away.  Please try that before reporting this as a bug.
+
+
+host stacktrace:
+==3316278==    at 0x58047B6A: show_sched_status_wrk (m_libcassert.c:406)
+==3316278==    by 0x58047C87: report_and_quit (m_libcassert.c:477)
+==3316278==    by 0x58047E17: vgPlain_assert_fail (m_libcassert.c:543)
+==3316278==    by 0x580522E4: get_bszB_as_is (m_mallocfree.c:303)
+==3316278==    by 0x580522E4: is_inuse_block (m_mallocfree.c:331)
+==3316278==    by 0x580522E4: vgPlain_describe_arena_addr (m_mallocfree.c:1592)
+==3316278==    by 0x5803ECEA: vgPlain_describe_addr (m_addrinfo.c:185)
+==3316278==    by 0x5803DB3F: vgMemCheck_update_Error_extra (mc_errors.c:1185)
+==3316278==    by 0x58042BF4: vgPlain_maybe_record_error (m_errormgr.c:822)
+==3316278==    by 0x5803CFA8: vgMemCheck_record_address_error (mc_errors.c:765)
+==3316278==    by 0x1004117CD8: ???
+==3316278==    by 0x1002E8DF2F: ???
+==3316278==    by 0x1002E8DF17: ???
+==3316278==    by 0x1002E8DF2F: ???
+==3316278==    by 0x1002E8DF3F: ???
+
+sched status:
+  running_tid=1
+
+Thread 1: status = VgTs_Runnable (lwpid 3316278)
+==3316278==    at 0x109409: furthestReachable (furthestReachable.c:45)
+==3316278==    by 0x10920F: main (testFurthestReachable.c:16)
+client stack range: [0x1FFEFFE000 0x1FFF000FFF] client SP: 0x1FFF000080
+valgrind stack range: [0x1002D8E000 0x1002E8DFFF] top usage: 18472 of 1048576
+
+
+Note: see also the FAQ in the source distribution.
+It contains workarounds to several common problems.
+In particular, if Valgrind aborted or crashed after
+identifying problems in your program, there's a good chance
+that fixing those problems will prevent Valgrind aborting or
+crashing, especially if it happened in m_mallocfree.c.
+
+If that doesn't help, please report this bug to: www.valgrind.org
+
+In the bug report, send all the above text, the valgrind
+version, and what OS and version you are using.  Thanks.
+

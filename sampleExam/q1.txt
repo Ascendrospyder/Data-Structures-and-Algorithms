@@ -1,0 +1,8 @@
+Question 1
+
+What is the time complexity of the algorithm? Justify your answer.
+The following algorithm has a time complexity of O(nlog(n)). This being as a result of breaking the problem into a 
+size of n/2 in turn takes log(n) time to complexity. Then, it is known to take O(n) time to combine the results of the 
+subproblems which in turn means it takes O(nlog(n)) time. 
+
+
