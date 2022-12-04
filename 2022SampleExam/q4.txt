@@ -2,6 +2,11 @@ Question 4
 
 Which of the given algorithms could have been used to construct the
 mininum spanning tree? Justify your answer.
+We can use kruskals to derive the minimum spanning tree below. Kruskals algorithm, relies 
+on the fact that we choose edges with the minimum weight and check to see if that forms a cycle. If it doe
+not then we add that edge to our tree. The reason why this would use kruskals algorithm instead of prims is because 
+prims algorithm relies on the edges to be connected at all times. Furthermore, we can use dfs to build the folowing minimum
+spanning tree. 
 
 
 

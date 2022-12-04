@@ -2,7 +2,10 @@ Question 5
 
 (a) Describe and justify the steps you would take to determine which
     sorting algorithm the program uses.
-
+    To determine if the which sorting algorithm is which we will first need to test for the stability. 
+    Since selection sort and randomised quicksort are not stable algorithms we will now need to test for 
+    the runtime of the program by either creating a shell script or running the .time linux command. We will first 
+    
 
 
 (b) Is the sorting algorithm that the program uses stable? How confident

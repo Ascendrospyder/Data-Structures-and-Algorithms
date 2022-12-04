@@ -2,20 +2,23 @@ Question 3
 
 (a) Which of the given sequences (A, B, C or D) would be produced by a
     valid post-order traversal of the same tree? Explain your answer.
-
+    The following tree traversed in post order would result in B. This being as given, the 
+    preorder which printf the root, then the left and right subtree, we can make a sketch of the 
+    tree of interest. As a result, since post order traversal is left then right subtree and finally 
+    the root, we result in the combination of 2 8 7 14 10 20 33 40 24 16
 
 
 (b)
 
-Value in the root node: 
+Value in the root node: 36
 
-Value in the left child (of the root): 
+Value in the left child (of the root):  32
 
-Value in the right child (of the root): 
+Value in the right child (of the root): 39 
 
 (c)
 
-i.  Value(s) in the root node: 
+i.  Value(s) in the root node: 20 
 
-ii. Value(s) in the node that now contains 62: 
+ii. Value(s) in the node that now contains 62: 35 60 62
 

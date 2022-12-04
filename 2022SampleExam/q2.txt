@@ -2,8 +2,9 @@ Question 2
 
 Explain why the compilation error occurred and briefly describe how it
 can be fixed.
-The following error occurs as a result of two cases. One, where the struct isnt declared at all, or two when it isn't defined. 
-In our case the following struct graph, edges hasn't been defined yet which in turn results in the following error. 
+The following error occurs as a result of either one of two cases. One, where the struct isnt declared at all, or two when it isn't defined. 
+In our case the following struct graph has been defined as Graph g does not fail, therefore this leads us to believe that edges hasn't been defined 
+yet which in turn results in the following error. 
 
 
 

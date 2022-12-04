@@ -2,16 +2,20 @@ Question 7
 
 (a) How many items are examined in searching for the key 42? Justify
     your answer.
-
+    It will be examined 4 times. This being as 42 % 11 = 9 which means it will get 
+    placed in the 9th index so we need to check there, at the 9th index we have 9, 20, 31 and 42 inserted (up to and including 42).
+    As a result we would only check 4 item.
 
 
 (b) How many items are examined in searching for the key 111? Justify
     your answer.
-
+    It would be examined 9 times. This being as 111 % 11 results in 0, where in the 0th index
+    the following numbers are inserted. 11, 22, 33, 44, 55, 66, 77, 88, 99. Since 111 is not inserted it 
+    will only make 9 checks. 
 
 
 (c) What is the worst-case search cost after N total items have been
     inserted? Justify your answer.
-
+    The following would take O(N/11) time. 
 
 

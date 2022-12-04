@@ -2,6 +2,10 @@ Question 6
 
 Which of the data structures is most suitable? Justify your answer.
 You must use time complexities as a basis for your justification.
-
+The avl tree is the most suitable data type. An AVL tree is a binary search tree that 
+rebalances itself automatically. The AVL tree is a suitable data structure to implement 
+this PQ adt as to add a new element takes O(log(n)). To pop the key with the highest priority would 
+take O(nlog(n)) time as it takes n time to search an avl tree and it takes log(n) time to delete that element. 
+Moreover, it takes 
 
 
